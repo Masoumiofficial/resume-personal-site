@@ -22,6 +22,19 @@ class User extends Authenticatable
     use HasFactory, Notifiable, TwoFactorAuthenticatable;
 
     /**
+     * Mirrors the column defaults so a freshly created instance (not re-read
+     * from the database) still has these attributes under Model::shouldBeStrict().
+     *
+     * @var array<string, mixed>
+     */
+    protected $attributes = [
+        'two_factor_secret' => null,
+        'two_factor_recovery_codes' => null,
+        'two_factor_confirmed_at' => null,
+        'last_login_at' => null,
+    ];
+
+    /**
      * @return array<string, string>
      */
     protected function casts(): array

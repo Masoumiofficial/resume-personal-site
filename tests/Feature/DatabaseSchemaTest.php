@@ -2,7 +2,7 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Facades\Schema;
 use Tests\TestCase;
 
@@ -12,10 +12,9 @@ use Tests\TestCase;
  */
 class DatabaseSchemaTest extends TestCase
 {
-    use RefreshDatabase;
-
-    /** DDL (rollback/migrate) implicitly commits on MySQL/MariaDB, so no wrapping transaction here. */
-    protected $connectionsToTransact = [];
+    // Real migrate/rollback per test (no wrapping transaction): DDL implicitly
+    // commits on MySQL/MariaDB, and the rollback test needs a real schema.
+    use DatabaseMigrations;
 
     public function test_exact_table_list(): void
     {
