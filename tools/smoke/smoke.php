@@ -51,6 +51,10 @@ function check(string $state, string $name, string $details = ''): void
     global $results;
     $results[] = [$state, $name, $details];
     printf("%-4s  %s%s\n", $state, $name, $details === '' ? '' : "  — {$details}");
+    if (getenv('GITHUB_ACTIONS') === 'true' && in_array($state, ['FAIL', 'WARN'], true)) {
+        // Annotations show on the run page (and via the API) without opening the log.
+        printf("::%s title=Smoke %s::%s%s\n", $state === 'FAIL' ? 'error' : 'warning', $state, $name, $details === '' ? '' : " — {$details}");
+    }
 }
 
 /** @return array{status: int, headers: array<string, string>, body: string, ttfb: float, error: string} */
