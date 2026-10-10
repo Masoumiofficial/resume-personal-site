@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>راهنمای طراحی | نمونهٔ اولیه</title>
+  <meta name="robots" content="noindex, nofollow">
+  <script>try{var t=localStorage.getItem('theme');if(t==='dark'||t==='light')document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+  <link rel="preload" href="assets/fonts/Vazirmatn-wght.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="assets/css/tokens.css">
+  <link rel="stylesheet" href="assets/css/base.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <link rel="stylesheet" href="assets/css/site.css">
+  <style>
+    .swatches { display: grid; gap: var(--space-3); grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr)); }
+    .swatch { border: 1px solid var(--color-border); border-radius: var(--radius-md); overflow: hidden; background: var(--color-surface); font-size: var(--text-xs); }
+    .swatch__chip { block-size: 4rem; }
+    .swatch__meta { padding: var(--space-2) var(--space-3); }
+    .sg-section { padding-block: var(--space-10); border-block-end: 1px solid var(--color-border); }
+    .sg-section > h2 { margin-block-end: var(--space-6); font-size: var(--text-xl); }
+    .type-row { display: grid; grid-template-columns: 8rem 1fr; gap: var(--space-4); align-items: baseline; padding-block: var(--space-3); border-block-end: 1px dashed var(--color-border); }
+    .type-row code { font-size: var(--text-xs); color: var(--color-text-muted); }
+    .space-bar { block-size: 0.75rem; background: var(--color-accent); border-radius: 2px; }
+    @media (max-width: 30rem) { .brand > span:not(.monogram), .sg-home { display: none; } }
+  </style>
+</head>
+<body>
+<a class="skip-link" href="#main">پرش به محتوای اصلی</a>
+<header class="site-header">
+  <div class="container site-header__inner">
+    <a class="brand" href="index.html"><span class="monogram" aria-hidden="true">س‌م</span><span>راهنمای طراحی</span></a>
+    <div class="header-actions" style="margin-inline-start:auto">
+      <a class="btn btn--ghost btn--sm sg-home" href="index.html">صفحهٔ اصلی</a>
+      <a class="btn btn--ghost btn--sm" href="admin.html">پنل</a>
+      <button class="btn btn--ghost btn--sm" type="button" data-theme-toggle aria-pressed="false">روشن / تیره</button>
+    </div>
+  </div>
+</header>
+
+<main id="main" class="container">
+  <section class="sg-section">
+    <h1 style="font-size: var(--text-2xl)">سیستم طراحی — نسخهٔ ۰٫۱</h1>
+    <p class="muted" style="margin-block-start: var(--space-3); max-inline-size: 40rem">همهٔ مقادیر از <bdi dir="ltr">tokens.css</bdi> می‌آیند. اعداد کنتراست با فرمول WCAG 2.x محاسبه شده‌اند (جزئیات در <bdi dir="ltr">docs/phase-1/design-system.md</bdi>).</p>
+  </section>
+
+  <section class="sg-section" aria-labelledby="colors">
+    <h2 id="colors">رنگ‌ها</h2>
+    <div class="swatches">
+      <div class="swatch"><div class="swatch__chip" style="background:var(--color-bg)"></div><div class="swatch__meta"><strong>bg</strong></div></div>
+      <div class="swatch"><div class="swatch__chip" style="background:var(--color-surface)"></div><div class="swatch__meta"><strong>surface</strong></div></div>
+      <div class="swatch"><div class="swatch__chip" style="background:var(--color-bg-subtle)"></div><div class="swatch__meta"><strong>bg-subtle</strong></div></div>
+      <div class="swatch"><div class="swatch__chip" style="background:var(--color-text)"></div><div class="swatch__meta"><strong>text</strong></div></div>
+      <div class="swatch"><div class="swatch__chip" style="background:var(--color-text-muted)"></div><div class="swatch__meta"><strong>text-muted</strong></div></div>
+      <div class="swatch"><div class="swatch__chip" style="background:var(--color-accent)"></div><div class="swatch__meta"><strong>accent</strong></div></div>
+      <div class="swatch"><div class="swatch__chip" style="background:var(--color-accent-soft)"></div><div class="swatch__meta"><strong>accent-soft</strong></div></div>
+      <div class="swatch"><div class="swatch__chip" style="background:var(--color-success)"></div><div class="swatch__meta"><strong>success</strong></div></div>
+      <div class="swatch"><div class="swatch__chip" style="background:var(--color-warning)"></div><div class="swatch__meta"><strong>warning</strong></div></div>
+      <div class="swatch"><div class="swatch__chip" style="background:var(--color-danger)"></div><div class="swatch__meta"><strong>danger</strong></div></div>
+    </div>
+  </section>
+
+  <section class="sg-section" aria-labelledby="type">
+    <h2 id="type">تایپوگرافی — وزیرمتن (متغیر)</h2>
+    <div class="type-row"><code>text-3xl / 900</code><span style="font-size:var(--text-3xl);font-weight:900;line-height:var(--leading-tight)">سجاد معصومی</span></div>
+    <div class="type-row"><code>text-2xl / 800</code><span style="font-size:var(--text-2xl);font-weight:800;line-height:var(--leading-tight)">تجربهٔ ساختن، نه فقط مشاوره</span></div>
+    <div class="type-row"><code>text-xl / 700</code><span style="font-size:var(--text-xl);font-weight:700">پروژه‌های منتخب</span></div>
+    <div class="type-row"><code>text-md</code><span style="font-size:var(--text-md)">وب‌سایت باید اعتماد بسازد و به فروش کمک کند.</span></div>
+    <div class="type-row"><code>text-base / prose</code><p class="prose" style="margin:0">متن بدنه با فاصلهٔ خطوط ۱٫۹۵ برای خوانایی بهتر حروف فارسی. اعداد فارسی: ۱۲۳۴۵۶۷۸۹۰ و ترکیب با <bdi dir="ltr">Laravel 13</bdi> و <bdi dir="ltr">PHP 8.4</bdi> بدون به‌هم‌ریختگی جهت.</p></div>
+    <div class="type-row"><code>text-sm muted</code><span class="muted" style="font-size:var(--text-sm)">متن کمکی و توضیحات فرم‌ها</span></div>
+    <div class="type-row"><code>tabular</code><span class="tabular">۷٬۵۰۰٬۰۰۰ — ۱۵٬۰۰۰٬۰۰۰ — ۱٬۰۰۰٬۰۰۰</span></div>
+  </section>
+
+  <section class="sg-section" aria-labelledby="space">
+    <h2 id="space">فاصله‌ها (پایهٔ ۴px)</h2>
+    <div class="stack" style="--stack-gap: var(--space-2)">
+      <div class="cluster"><code style="inline-size:5rem">space-1</code><div class="space-bar" style="inline-size:var(--space-1)"></div></div>
+      <div class="cluster"><code style="inline-size:5rem">space-2</code><div class="space-bar" style="inline-size:var(--space-2)"></div></div>
+      <div class="cluster"><code style="inline-size:5rem">space-4</code><div class="space-bar" style="inline-size:var(--space-4)"></div></div>
+      <div class="cluster"><code style="inline-size:5rem">space-6</code><div class="space-bar" style="inline-size:var(--space-6)"></div></div>
+      <div class="cluster"><code style="inline-size:5rem">space-8</code><div class="space-bar" style="inline-size:var(--space-8)"></div></div>
+      <div class="cluster"><code style="inline-size:5rem">space-12</code><div class="space-bar" style="inline-size:var(--space-12)"></div></div>
+    </div>
+  </section>
+
+  <section class="sg-section" aria-labelledby="buttons">
+    <h2 id="buttons">دکمه‌ها و نشان‌ها</h2>
+    <div class="cluster">
+      <button class="btn btn--primary" type="button">اصلی</button>
+      <button class="btn" type="button">ثانویه</button>
+      <button class="btn btn--ghost" type="button">بی‌حاشیه</button>
+      <button class="btn btn--danger" type="button">حذف</button>
+      <button class="btn btn--sm" type="button">کوچک</button>
+      <button class="btn" type="button" disabled>غیرفعال</button>
+    </div>
+    <div class="cluster" style="margin-block-start: var(--space-5)">
+      <span class="badge">پیش‌فرض</span>
+      <span class="badge badge--accent"><span class="badge__dot" aria-hidden="true"></span>تأکید</span>
+      <span class="badge badge--success"><span class="badge__dot" aria-hidden="true"></span>منتشرشده</span>
+      <span class="badge badge--warning">پیش‌نویس</span>
+      <span class="badge badge--danger">رد شده</span>
+    </div>
+  </section>
+
+  <section class="sg-section" aria-labelledby="forms">
+    <h2 id="forms">فرم‌ها</h2>
+    <form class="stack" style="--stack-gap: var(--space-5); max-inline-size: 32rem" action="#" onsubmit="return false" novalidate>
+      <div class="field">
+        <label class="field__label" for="sg-name">نام شما<span class="required-mark" aria-hidden="true">*</span></label>
+        <input class="input" id="sg-name" autocomplete="name" required>
+      </div>
+      <div class="field">
+        <label class="field__label" for="sg-email">ایمیل<span class="required-mark" aria-hidden="true">*</span></label>
+        <input class="input input--ltr" id="sg-email" type="email" autocomplete="email" value="name@" aria-invalid="true" aria-describedby="sg-email-err">
+        <span class="field__error" id="sg-email-err">نشانی ایمیل معتبر نیست.</span>
+      </div>
+      <div class="field">
+        <label class="field__label" for="sg-subject">موضوع</label>
+        <select class="select" id="sg-subject"><option>طراحی سایت</option><option>داده و هوش مصنوعی</option><option>مشاوره</option><option>سایر</option></select>
+      </div>
+      <div class="field">
+        <label class="field__label" for="sg-msg">پیام</label>
+        <textarea class="textarea" id="sg-msg" rows="4" aria-describedby="sg-msg-hint"></textarea>
+        <span class="field__hint" id="sg-msg-hint">حداقل ۲۰ نویسه.</span>
+      </div>
+      <label class="checkbox"><input type="checkbox"> با <a href="#">حریم خصوصی</a> موافقم.</label>
+      <div><button class="btn btn--primary" type="submit">ارسال پیام</button></div>
+    </form>
+  </section>
+
+  <section class="sg-section" aria-labelledby="feedback">
+    <h2 id="feedback">پیام‌های سیستم و حالت خالی</h2>
+    <div class="stack" style="--stack-gap: var(--space-3); max-inline-size: 40rem">
+      <div class="alert alert--info" role="status">پیام شما دریافت شد و در اولین فرصت پاسخ داده می‌شود.</div>
+      <div class="alert alert--success" role="status">تغییرات با موفقیت ذخیره شد.</div>
+      <div class="alert alert--warning" role="status">ورود دومرحله‌ای فعال نیست.</div>
+      <div class="alert alert--danger" role="alert">آپلود ناموفق: نوع فایل مجاز نیست (فقط JPG، PNG، WebP، PDF).</div>
+    </div>
+    <div class="card empty" style="margin-block-start: var(--space-6); max-inline-size: 40rem">
+      <h3>هنوز نمونه‌کاری ثبت نشده</h3>
+      <p style="font-size: var(--text-sm)">اولین پروژه را اضافه کنید؛ تا آن زمان این بخش در سایت عمومی نمایش داده نمی‌شود.</p>
+      <div style="margin-block-start: var(--space-4)"><a class="btn btn--primary btn--sm" href="#">افزودن نمونه‌کار</a></div>
+    </div>
+  </section>
+
+  <section class="sg-section" aria-labelledby="table">
+    <h2 id="table">جدول</h2>
+    <div class="table-wrap">
+      <table class="table">
+        <caption class="visually-hidden">نمونهٔ جدول ریدایرکت‌ها</caption>
+        <thead><tr><th scope="col">آدرس قدیم</th><th scope="col">مقصد</th><th scope="col">کد</th><th scope="col">بازدید</th></tr></thead>
+        <tbody>
+          <tr><td><bdi dir="ltr">/shop/</bdi></td><td><bdi dir="ltr">/services/</bdi></td><td><span class="badge">301</span></td><td class="tabular">۰</td></tr>
+          <tr><td><bdi dir="ltr">/product/samandehi-license/</bdi></td><td><bdi dir="ltr">/services/samandehi-license/</bdi></td><td><span class="badge">301</span></td><td class="tabular">۰</td></tr>
+          <tr><td><bdi dir="ltr">/cart/</bdi></td><td class="muted">—</td><td><span class="badge badge--warning">410</span></td><td class="tabular">۰</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</main>
+<script src="assets/js/app.js" defer></script>
+</body>
+</html>

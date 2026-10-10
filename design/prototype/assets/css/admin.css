@@ -1,0 +1,66 @@
+/* ==========================================================================
+   Admin panel layout — speed of daily work over decoration.
+   ========================================================================== */
+.admin { display: grid; grid-template-columns: 16rem minmax(0, 1fr); min-block-size: 100vh; }
+
+.admin-sidebar {
+  position: sticky; inset-block-start: 0; block-size: 100vh; overflow-y: auto;
+  display: flex; flex-direction: column; gap: var(--space-6);
+  padding: var(--space-5) var(--space-4);
+  background: var(--color-surface);
+  border-inline-end: 1px solid var(--color-border);
+}
+.admin-sidebar .brand { padding-inline: var(--space-2); }
+.admin-nav__group { display: grid; gap: 2px; }
+.admin-nav__label { padding: 0 var(--space-3) var(--space-1); font-size: var(--text-xs); color: var(--color-text-muted); font-weight: var(--weight-medium); }
+.admin-nav a {
+  display: flex; align-items: center; gap: var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+  color: var(--color-text-muted); text-decoration: none;
+  font-size: var(--text-sm); font-weight: var(--weight-medium);
+}
+.admin-nav a svg { inline-size: 1.1rem; block-size: 1.1rem; flex: none; }
+.admin-nav a:hover { background: var(--color-bg-subtle); color: var(--color-text); }
+.admin-nav a[aria-current="page"] { background: var(--color-accent-soft); color: var(--color-accent); }
+.admin-nav__count { margin-inline-start: auto; }
+
+.admin-main { min-inline-size: 0; display: flex; flex-direction: column; }
+.admin-topbar {
+  position: sticky; inset-block-start: 0; z-index: var(--z-header);
+  display: flex; align-items: center; gap: var(--space-3);
+  min-block-size: 3.75rem; padding-inline: var(--space-6);
+  background: var(--glass-bg);
+  -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
+  border-block-end: 1px solid var(--color-border);
+}
+.admin-topbar__title { font-size: var(--text-md); font-weight: var(--weight-bold); line-height: 1.4; margin: 0; }
+.admin-topbar__actions { margin-inline-start: auto; display: flex; gap: var(--space-2); align-items: center; }
+.admin-content { padding: var(--space-6); display: grid; gap: var(--space-6); max-inline-size: 80rem; inline-size: 100%; }
+
+.stat-grid { display: grid; gap: var(--space-4); grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr)); }
+.stat { display: grid; gap: var(--space-1); padding: var(--space-5); }
+.stat__label { font-size: var(--text-sm); color: var(--color-text-muted); display: flex; gap: var(--space-2); align-items: center; }
+.stat__value { font-size: var(--text-2xl); font-weight: var(--weight-black); line-height: 1.2; }
+.stat__meta { font-size: var(--text-xs); color: var(--color-text-muted); }
+
+.panel-grid { display: grid; gap: var(--space-6); grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); align-items: start; }
+.panel__head { display: flex; justify-content: space-between; align-items: center; gap: var(--space-3); margin-block-end: var(--space-4); }
+.panel__head h2 { font-size: var(--text-md); }
+
+.quick-actions { display: grid; gap: var(--space-2); }
+.quick-actions a { justify-content: flex-start; border-radius: var(--radius-md); }
+
+.row-actions { display: flex; gap: var(--space-1); justify-content: flex-end; }
+
+@media (max-width: 64rem) { .panel-grid { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 52rem) {
+  .admin { grid-template-columns: minmax(0, 1fr); }
+  /* Off-canvas: display:none while closed so it neither widens the page nor stays in the Tab order */
+  .admin-sidebar { display: none; position: fixed; inset-block: 0; inset-inline-start: 0; inline-size: min(18rem, 85vw); z-index: var(--z-overlay); box-shadow: var(--shadow-lg); }
+  .admin-sidebar[data-open="true"] { display: flex; }
+  .admin-content { padding: var(--space-4); }
+  .admin-topbar { padding-inline: var(--space-4); }
+  .admin-topbar__actions .hide-sm { display: none; }
+}
+@media (min-width: 52.01rem) { .admin-menu-btn { display: none; } }

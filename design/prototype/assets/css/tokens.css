@@ -1,0 +1,188 @@
+/* ==========================================================================
+   Design tokens — Sajad Masoumi platform
+   Single source of truth for color, type, spacing, radius, elevation, motion.
+   Contrast of every text/background pair verified >= 4.5:1 (WCAG AA) in both
+   themes — see docs/phase-1/design-system.md §2.
+   ========================================================================== */
+
+@font-face {
+  font-family: "Vazirmatn";
+  src: url("../fonts/Vazirmatn-wght.woff2") format("woff2-variations"),
+       url("../fonts/Vazirmatn-wght.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  color-scheme: light;
+
+  /* ---- Color: neutrals ---- */
+  --color-bg: #F8F9FB;
+  --color-bg-subtle: #F1F3F7;
+  --color-surface: #FFFFFF;
+  --color-surface-raised: #FFFFFF;
+  --color-border: #E4E7EC;
+  --color-border-strong: #CDD2DB;
+  --color-text: #0B1220;
+  --color-text-muted: #525B6B;
+  --color-text-inverse: #FFFFFF;
+
+  /* ---- Color: brand accent (blue) ---- */
+  --color-accent: #1D4ED8;
+  --color-accent-hover: #1A43BC;
+  --color-accent-contrast: #FFFFFF;
+  --color-accent-soft: #EAF0FF;
+  --color-accent-ring: rgb(29 78 216 / 0.35);
+
+  /* ---- Color: feedback ---- */
+  --color-success: #067647;
+  --color-success-soft: #E7F6EE;
+  --color-danger: #B42318;
+  --color-danger-soft: #FDECEA;
+  --color-warning: #93370D;
+  --color-warning-soft: #FEF4E6;
+  --color-info: var(--color-accent);
+  --color-info-soft: var(--color-accent-soft);
+
+  /* ---- Effects (used sparingly) ---- */
+  --glass-bg: rgb(248 249 251 / 0.72);
+  --hero-glow: radial-gradient(60% 60% at 70% 0%, rgb(29 78 216 / 0.10), transparent 70%);
+
+  /* ---- Typography ---- */
+  --font-sans: "Vazirmatn", system-ui, -apple-system, "Segoe UI", Tahoma, sans-serif;
+  --font-mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+
+  --text-xs: 0.8125rem;   /* 13px */
+  --text-sm: 0.875rem;    /* 14px */
+  --text-base: 1rem;      /* 16px */
+  --text-md: 1.125rem;    /* 18px */
+  --text-lg: 1.25rem;     /* 20px */
+  --text-xl: clamp(1.375rem, 1.2rem + 0.8vw, 1.75rem);
+  --text-2xl: clamp(1.75rem, 1.4rem + 1.6vw, 2.5rem);
+  --text-3xl: clamp(2.125rem, 1.5rem + 2.8vw, 3.5rem);
+
+  --leading-tight: 1.35;   /* Persian headings need more room than Latin */
+  --leading-normal: 1.75;
+  --leading-relaxed: 1.95; /* long-form Persian prose */
+
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-bold: 700;
+  --weight-black: 800;
+
+  /* ---- Spacing (4px base) ---- */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-20: 5rem;
+  --space-section: clamp(3.5rem, 2rem + 6vw, 7rem);
+
+  /* ---- Layout ---- */
+  --container: 72rem;      /* 1152px */
+  --container-narrow: 44rem;
+  --gutter: clamp(1rem, 0.5rem + 2.5vw, 2rem);
+
+  /* ---- Radius ---- */
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
+  --radius-pill: 999px;
+
+  /* ---- Elevation (controlled, soft) ---- */
+  --shadow-xs: 0 1px 2px rgb(16 24 40 / 0.05);
+  --shadow-sm: 0 1px 3px rgb(16 24 40 / 0.08), 0 1px 2px rgb(16 24 40 / 0.04);
+  --shadow-md: 0 8px 24px -6px rgb(16 24 40 / 0.10), 0 2px 6px rgb(16 24 40 / 0.04);
+  --shadow-lg: 0 24px 48px -12px rgb(16 24 40 / 0.16);
+
+  /* ---- Motion ---- */
+  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --duration-fast: 120ms;
+  --duration-base: 200ms;
+  --duration-slow: 320ms;
+
+  /* ---- Z-index ---- */
+  --z-header: 50;
+  --z-overlay: 90;
+  --z-toast: 100;
+}
+
+/* ---- Dark theme: explicit choice ---- */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --color-bg: #0A0D14;
+  --color-bg-subtle: #0E121B;
+  --color-surface: #111520;
+  --color-surface-raised: #161B28;
+  --color-border: #232A3A;
+  --color-border-strong: #313A4E;
+  --color-text: #E9ECF2;
+  --color-text-muted: #9BA4B5;
+  --color-text-inverse: #0A0D14;
+  --color-accent: #7AA2FF;
+  --color-accent-hover: #93B4FF;
+  --color-accent-contrast: #0A0D14;
+  --color-accent-soft: rgb(122 162 255 / 0.12);
+  --color-accent-ring: rgb(122 162 255 / 0.45);
+  --color-success: #47CD89;
+  --color-success-soft: rgb(71 205 137 / 0.12);
+  --color-danger: #F97066;
+  --color-danger-soft: rgb(249 112 102 / 0.12);
+  --color-warning: #FDB022;
+  --color-warning-soft: rgb(253 176 34 / 0.12);
+  --glass-bg: rgb(10 13 20 / 0.72);
+  --hero-glow: radial-gradient(60% 60% at 70% 0%, rgb(122 162 255 / 0.14), transparent 70%);
+  --shadow-xs: 0 1px 2px rgb(0 0 0 / 0.4);
+  --shadow-sm: 0 1px 3px rgb(0 0 0 / 0.5);
+  --shadow-md: 0 8px 24px -6px rgb(0 0 0 / 0.6);
+  --shadow-lg: 0 24px 48px -12px rgb(0 0 0 / 0.7);
+}
+
+/* ---- Dark theme: follow OS when the user has not chosen ---- */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --color-bg: #0A0D14;
+    --color-bg-subtle: #0E121B;
+    --color-surface: #111520;
+    --color-surface-raised: #161B28;
+    --color-border: #232A3A;
+    --color-border-strong: #313A4E;
+    --color-text: #E9ECF2;
+    --color-text-muted: #9BA4B5;
+    --color-text-inverse: #0A0D14;
+    --color-accent: #7AA2FF;
+    --color-accent-hover: #93B4FF;
+    --color-accent-contrast: #0A0D14;
+    --color-accent-soft: rgb(122 162 255 / 0.12);
+    --color-accent-ring: rgb(122 162 255 / 0.45);
+    --color-success: #47CD89;
+    --color-success-soft: rgb(71 205 137 / 0.12);
+    --color-danger: #F97066;
+    --color-danger-soft: rgb(249 112 102 / 0.12);
+    --color-warning: #FDB022;
+    --color-warning-soft: rgb(253 176 34 / 0.12);
+    --glass-bg: rgb(10 13 20 / 0.72);
+    --hero-glow: radial-gradient(60% 60% at 70% 0%, rgb(122 162 255 / 0.14), transparent 70%);
+    --shadow-xs: 0 1px 2px rgb(0 0 0 / 0.4);
+    --shadow-sm: 0 1px 3px rgb(0 0 0 / 0.5);
+    --shadow-md: 0 8px 24px -6px rgb(0 0 0 / 0.6);
+    --shadow-lg: 0 24px 48px -12px rgb(0 0 0 / 0.7);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-fast: 0ms;
+    --duration-base: 0ms;
+    --duration-slow: 0ms;
+  }
+}
