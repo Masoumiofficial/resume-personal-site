@@ -1,0 +1,75 @@
+old_url,type,discovered_via,last_modified,proposed_action,proposed_target,notes
+/,page (home),page-sitemap + REST,2026-07-11,keep,/,Homepage; remove duplicated bio/resume blocks
+/about/,page,page-sitemap + REST,2026-06-18,keep,/about/,
+/resume/,page,page-sitemap + REST,2026-06-18,keep,/resume/,Printable resume generated from DB
+/works/,page,page-sitemap + REST,2026-02-04,keep,/works/,Portfolio index (currently empty on old site)
+/blog/,page (posts index),post-sitemap + REST,2024-10-17,keep,/blog/,Paginated: /blog/page/N/ -> decide in Phase 1
+/contact/,page,page-sitemap + REST,2026-02-04,keep,/contact/,
+/shop/,page (WooCommerce),page-sitemap + product-sitemap,2024-10-16,DECISION Q3,TBD,If no shop: 301 to service page or 410
+/cart/,page (WooCommerce),page-sitemap,2024-10-17,410,,No commerce in v1
+/checkout/,page (WooCommerce),page-sitemap,2024-10-16,410,,No commerce in v1
+/checkout-3/,page (WooCommerce),page-sitemap,2024-10-17,410,,Duplicate checkout page
+/my-account/,page (WooCommerce),page-sitemap,2024-10-16,410,,No public accounts in v1
+/product/samandehi-license/,product,product-sitemap,2026-08-01,DECISION Q3,TBD,Options: service page / 301 etehadwp.com/product/samandehi/ / 410
+/product-category/%d8%ae%d8%af%d9%85%d8%a7%d8%aa-%d8%ab%d8%a8%d8%aa%db%8c-%d9%88-%d9%85%d8%ac%d9%88%d8%b2%d9%87%d8%a7%db%8c-%da%a9%d8%b3%d8%a8-%d9%88-%da%a9%d8%a7%d8%b1-%d9%85%d8%ac%d8%a7%d8%b2%db%8c/,product category,product_cat-sitemap,2026-08-01,DECISION Q3,TBD,Follows product decision
+/what-is-wordpress/,post,REST,2026-08-20,keep (proposed),/what-is-wordpress/,Root-level slug kept to avoid redirects; reserved-slug validation required. Duplicate of etehadwp.com (likely); NOT in sitemap; DECISION Q4
+/what-is-domain/,post,REST,2026-08-20,keep (proposed),/what-is-domain/,Root-level slug kept to avoid redirects; reserved-slug validation required. Verified duplicate of etehadwp.com/what-is-domain/; NOT in sitemap; DECISION Q4
+/software-testing-and-optimization-methods/,post,REST + post-sitemap,2024-11-26,keep (proposed),/software-testing-and-optimization-methods/,Root-level slug kept to avoid redirects; reserved-slug validation required. 
+/programming-guide-for-beginners/,post,REST + post-sitemap,2024-11-07,keep (proposed),/programming-guide-for-beginners/,Root-level slug kept to avoid redirects; reserved-slug validation required. 
+/learn-programming-for-beginners/,post,REST + post-sitemap,2024-11-03,keep (proposed),/learn-programming-for-beginners/,Root-level slug kept to avoid redirects; reserved-slug validation required. 
+/software-development/,category (3 posts),REST + category-sitemap,,301 (proposed),/blog/category/software-development/,Final category URL scheme decided in Phase 1
+/software-development/programming-tutorials/,category (1 posts),REST + category-sitemap,,301 (proposed),/blog/category/programming-tutorials/,Final category URL scheme decided in Phase 1
+/software-development/software-testing-optimization/,category (2 posts),REST + category-sitemap,,301 (proposed),/blog/category/software-testing-optimization/,Final category URL scheme decided in Phase 1
+/wp/,category (1 posts),REST,,301 (proposed),/blog/category/wp/,Final category URL scheme decided in Phase 1
+/wp/wordpress-tutorials/,category (2 posts),REST,,301 (proposed),/blog/category/wordpress-tutorials/,Final category URL scheme decided in Phase 1
+/software-development/developer-tools/,category (0 posts),REST,,410 (default) or recreate if planned,,Empty taxonomy; do not redirect to home
+/software-development/new-technologies/,category (0 posts),REST,,410 (default) or recreate if planned,,Empty taxonomy; do not redirect to home
+/wp/wordpress-plugins/,category (0 posts),REST,,410 (default) or recreate if planned,,Empty taxonomy; do not redirect to home
+/wp/wordpress-themes/,category (0 posts),REST,,410 (default) or recreate if planned,,Empty taxonomy; do not redirect to home
+/wp/wordpress-seo-optimization/,category (0 posts),REST,,410 (default) or recreate if planned,,Empty taxonomy; do not redirect to home
+/wp/wordpress-troubleshooting/,category (0 posts),REST,,410 (default) or recreate if planned,,Empty taxonomy; do not redirect to home
+/data-science-ai/,category (0 posts),REST,,410 (default) or recreate if planned,,Empty taxonomy; do not redirect to home
+/data-science-ai/data-science-basics/,category (0 posts),REST,,410 (default) or recreate if planned,,Empty taxonomy; do not redirect to home
+/data-science-ai/machine-learning-modeling/,category (0 posts),REST,,410 (default) or recreate if planned,,Empty taxonomy; do not redirect to home
+/data-science-ai/big-data-processing/,category (0 posts),REST,,410 (default) or recreate if planned,,Empty taxonomy; do not redirect to home
+/data-science-ai/data-visualization/,category (0 posts),REST,,410 (default) or recreate if planned,,Empty taxonomy; do not redirect to home
+/office-software/,category (0 posts),REST,,410 (default) or recreate if planned,,Empty taxonomy; do not redirect to home
+/office-software/word/,category (0 posts),REST,,410 (default) or recreate if planned,,Empty taxonomy; do not redirect to home
+/office-software/excel/,category (0 posts),REST,,410 (default) or recreate if planned,,Empty taxonomy; do not redirect to home
+/office-software/powerpoint/,category (0 posts),REST,,410 (default) or recreate if planned,,Empty taxonomy; do not redirect to home
+/office-software/outlook/,category (0 posts),REST,,410 (default) or recreate if planned,,Empty taxonomy; do not redirect to home
+/office-software/other-office-software/,category (0 posts),REST,,410 (default) or recreate if planned,,Empty taxonomy; do not redirect to home
+/%d8%af%d8%b3%d8%aa%d9%87%d8%a8%d9%86%d8%af%db%8c-%d9%86%d8%b4%d8%af%d9%87/,category (0 posts),REST,,410 (default) or recreate if planned,,Empty taxonomy; do not redirect to home
+/tag/%d8%a2%d9%85%d9%88%d8%b2%d8%b4-%d8%a8%d8%b1%d9%86%d8%a7%d9%85%d9%87%d9%86%d9%88%db%8c%d8%b3%db%8c/,tag (used),REST,,301 (proposed),/blog/tag/%d8%a2%d9%85%d9%88%d8%b2%d8%b4-%d8%a8%d8%b1%d9%86%d8%a7%d9%85%d9%87%d9%86%d9%88%db%8c%d8%b3%db%8c/,Or merge into categories (Phase 1)
+/tag/%d8%a2%d9%85%d9%88%d8%b2%d8%b4-%d8%aa%d9%88%d8%b3%d8%b9%d9%87%d8%af%d9%87%d9%86%d8%af%da%af%d8%a7%d9%86/,tag (used),REST,,301 (proposed),/blog/tag/%d8%a2%d9%85%d9%88%d8%b2%d8%b4-%d8%aa%d9%88%d8%b3%d8%b9%d9%87%d8%af%d9%87%d9%86%d8%af%da%af%d8%a7%d9%86/,Or merge into categories (Phase 1)
+/tag/%d8%a7%d8%a8%d8%b2%d8%a7%d8%b1%d9%87%d8%a7%db%8c-%d8%aa%d8%b3%d8%aa/,tag (used),REST,,301 (proposed),/blog/tag/%d8%a7%d8%a8%d8%b2%d8%a7%d8%b1%d9%87%d8%a7%db%8c-%d8%aa%d8%b3%d8%aa/,Or merge into categories (Phase 1)
+/tag/%d8%a7%d9%81%d8%b2%d8%a7%db%8c%d8%b4-%da%a9%db%8c%d9%81%db%8c%d8%aa-%d9%86%d8%b1%d9%85%d8%a7%d9%81%d8%b2%d8%a7%d8%b1/,tag (used),REST,,301 (proposed),/blog/tag/%d8%a7%d9%81%d8%b2%d8%a7%db%8c%d8%b4-%da%a9%db%8c%d9%81%db%8c%d8%aa-%d9%86%d8%b1%d9%85%d8%a7%d9%81%d8%b2%d8%a7%d8%b1/,Or merge into categories (Phase 1)
+/tag/%d8%a7%d9%86%d8%aa%d8%ae%d8%a7%d8%a8-%d8%a7%d8%a8%d8%b2%d8%a7%d8%b1%d9%87%d8%a7%db%8c-%d8%a8%d8%b1%d9%86%d8%a7%d9%85%d9%87%d9%86%d9%88%db%8c%d8%b3%db%8c/,tag (used),REST,,301 (proposed),/blog/tag/%d8%a7%d9%86%d8%aa%d8%ae%d8%a7%d8%a8-%d8%a7%d8%a8%d8%b2%d8%a7%d8%b1%d9%87%d8%a7%db%8c-%d8%a8%d8%b1%d9%86%d8%a7%d9%85%d9%87%d9%86%d9%88%db%8c%d8%b3%db%8c/,Or merge into categories (Phase 1)
+/tag/%d8%a8%d8%b1%d9%86%d8%a7%d9%85%d9%87%d9%86%d9%88%db%8c%d8%b3%db%8c-%d8%a8%d8%b1%d8%a7%db%8c-%d9%85%d8%a8%d8%aa%d8%af%db%8c%d8%a7%d9%86/,tag (used),REST,,301 (proposed),/blog/tag/%d8%a8%d8%b1%d9%86%d8%a7%d9%85%d9%87%d9%86%d9%88%db%8c%d8%b3%db%8c-%d8%a8%d8%b1%d8%a7%db%8c-%d9%85%d8%a8%d8%aa%d8%af%db%8c%d8%a7%d9%86/,Or merge into categories (Phase 1)
+/tag/%d8%a8%d9%87%db%8c%d9%86%d9%87%d8%b3%d8%a7%d8%b2%db%8c-%d9%86%d8%b1%d9%85%d8%a7%d9%81%d8%b2%d8%a7%d8%b1/,tag (used),REST,,301 (proposed),/blog/tag/%d8%a8%d9%87%db%8c%d9%86%d9%87%d8%b3%d8%a7%d8%b2%db%8c-%d9%86%d8%b1%d9%85%d8%a7%d9%81%d8%b2%d8%a7%d8%b1/,Or merge into categories (Phase 1)
+/tag/%d8%aa%d8%ad%d9%84%db%8c%d9%84-%d9%86%db%8c%d8%a7%d8%b2%d9%87%d8%a7%db%8c-%d9%be%d8%b1%d9%88%da%98%d9%87-agile-%d9%88-%d8%aa%d9%88%d8%b3%d8%b9%d9%87-%d9%be%d8%b1%d9%88%da%98%d9%87/,tag (used),REST,,301 (proposed),/blog/tag/%d8%aa%d8%ad%d9%84%db%8c%d9%84-%d9%86%db%8c%d8%a7%d8%b2%d9%87%d8%a7%db%8c-%d9%be%d8%b1%d9%88%da%98%d9%87-agile-%d9%88-%d8%aa%d9%88%d8%b3%d8%b9%d9%87-%d9%be%d8%b1%d9%88%da%98%d9%87/,Or merge into categories (Phase 1)
+/tag/%d8%aa%d8%b3%d8%aa-%d9%86%d8%b1%d9%85%d8%a7%d9%81%d8%b2%d8%a7%d8%b1/,tag (used),REST,,301 (proposed),/blog/tag/%d8%aa%d8%b3%d8%aa-%d9%86%d8%b1%d9%85%d8%a7%d9%81%d8%b2%d8%a7%d8%b1/,Or merge into categories (Phase 1)
+/tag/%d9%85%d8%af%db%8c%d8%b1%db%8c%d8%aa-%d9%be%d8%b1%d9%88%da%98%d9%87%d9%87%d8%a7%db%8c-%d8%a8%d8%b1%d9%86%d8%a7%d9%85%d9%87%d9%86%d9%88%db%8c%d8%b3%db%8c/,tag (used),REST,,301 (proposed),/blog/tag/%d9%85%d8%af%db%8c%d8%b1%db%8c%d8%aa-%d9%be%d8%b1%d9%88%da%98%d9%87%d9%87%d8%a7%db%8c-%d8%a8%d8%b1%d9%86%d8%a7%d9%85%d9%87%d9%86%d9%88%db%8c%d8%b3%db%8c/,Or merge into categories (Phase 1)
+/tag/%db%8c%d8%a7%d8%af%da%af%db%8c%d8%b1%db%8c-%da%a9%d8%af%d9%86%d9%88%db%8c%d8%b3%db%8c-%d9%be%d8%a7%db%8c%d8%aa%d9%88%d9%86-%d8%a8%d8%b1%d8%a7%db%8c-%d9%85%d8%a8%d8%aa%d8%af%db%8c%d8%a7%d9%86/,tag (used),REST,,301 (proposed),/blog/tag/%db%8c%d8%a7%d8%af%da%af%db%8c%d8%b1%db%8c-%da%a9%d8%af%d9%86%d9%88%db%8c%d8%b3%db%8c-%d9%be%d8%a7%db%8c%d8%aa%d9%88%d9%86-%d8%a8%d8%b1%d8%a7%db%8c-%d9%85%d8%a8%d8%aa%d8%af%db%8c%d8%a7%d9%86/,Or merge into categories (Phase 1)
+/tag/download-new-music/,tag (0 posts),REST,,410,,Empty tag
+/tag/majid-razavi/,tag (0 posts),REST,,410,,Empty tag
+/tag/%d8%af%d8%a7%d9%86%d9%84%d9%88%d8%af-%d8%a2%d9%87%d9%86%da%af-%d8%a7%db%8c%d8%b1%d8%a7%d9%86%db%8c/,tag (0 posts),REST,,410,,Empty tag
+/tag/%d8%af%d8%a7%d9%86%d9%84%d9%88%d8%af-%d8%a2%d9%87%d9%86%da%af-%d8%ac%d8%af%db%8c%d8%af/,tag (0 posts),REST,,410,,Empty tag
+/tag/%d9%85%d8%ac%db%8c%d8%af-%d8%b1%d8%b6%d9%88%db%8c/,tag (0 posts),REST,,410,,Empty tag
+/tag/%d8%b2%d8%a8%d8%a7%d9%86%d9%87%d8%a7%db%8c-%d8%a8%d8%b1%d9%86%d8%a7%d9%85%d9%87%d9%86%d9%88%db%8c%d8%b3%db%8c/,tag (0 posts),REST,,410,,Empty tag
+/author/smj/,author archive,observed on post page,,301,/about/,Single-author site
+/feed/,RSS feed,WordPress default (not fetched),,keep,/feed/,Existence not verified
+/comments/feed/,comments feed,WordPress default (not fetched),,410,,No comments in v1
+/sitemap_index.xml,sitemap (Rank Math),robots.txt,,301,/sitemap.xml,
+/post-sitemap.xml,sitemap (Rank Math),sitemap_index.xml,,301,/sitemap.xml,
+/page-sitemap.xml,sitemap (Rank Math),sitemap_index.xml,,301,/sitemap.xml,
+/product-sitemap.xml,sitemap (Rank Math),sitemap_index.xml,,301,/sitemap.xml,
+/category-sitemap.xml,sitemap (Rank Math),sitemap_index.xml,,301,/sitemap.xml,
+/product_cat-sitemap.xml,sitemap (Rank Math),sitemap_index.xml,,301,/sitemap.xml,
+/robots.txt,robots,fetched,,replace,/robots.txt,New rules; disallow /admin
+/wp-admin/,WP admin,robots.txt,,410,,Admin moves to /admin (not advertised in robots)
+/wp-login.php,WP login,WordPress default,,410,,
+/xmlrpc.php,WP XML-RPC,WordPress default,,410,,
+/wp-json/*,WP REST API,fetched,,410,,
+/wp-content/uploads/*,media files,REST media (~95 items),,301 per file (mapping generated by importer),/media/...,Only for migrated files; images in sitemaps first
+https://sajadmasoumi.ir/*,legacy domain,observed redirect to .com,,keep domain-level redirect,https://sajadmasoumi.com/$1,Verify it is 301 (not 302) and path-preserving
