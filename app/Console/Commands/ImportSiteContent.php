@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Article;
 use App\Models\ArticleCategory;
 use App\Models\Certification;
 use App\Models\Experience;
@@ -12,11 +13,14 @@ use App\Models\Skill;
 use App\Support\Activity;
 use App\Support\JalaliDate;
 use Illuminate\Console\Command;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
+use RuntimeException;
 
 /**
  * One-time (but safely repeatable) import of the old site's content from
- * database/content/sajadmasoumi-com.php.
+ * database/content/sajadmasoumi-com.php, plus the migrated blog posts in
+ * database/content/articles/*.md (front matter + Markdown body).
  *
  * Idempotent: rows are matched by a natural key (organization, title, slug,
  * name) and only created when missing. Existing rows are never changed, so
@@ -24,9 +28,9 @@ use Illuminate\Support\Facades\DB;
  */
 class ImportSiteContent extends Command
 {
-    protected $signature = 'app:import-site-content {--file= : Path to the content file} {--dry-run : Show what would be created without writing}';
+    protected $signature = 'app:import-site-content {--file= : Path to the content file} {--articles= : Directory of article Markdown files} {--dry-run : Show what would be created without writing}';
 
-    protected $description = 'Import the profile, resume, services and categories of the old WordPress site (create-only, idempotent)';
+    protected $description = 'Import the profile, resume, services, categories and articles of the old WordPress site (create-only, idempotent)';
 
     /** @var array<string, array{0:int,1:int}> section => [created, existing] */
     private array $counts = [];
@@ -51,6 +55,7 @@ class ImportSiteContent extends Command
             $this->skills($data['skills'] ?? []);
             $this->services($data['service_groups'] ?? []);
             $this->categories($data['article_categories'] ?? []);
+            $this->articles($this->option('articles') ?: database_path('content/articles'));
         } catch (\Throwable $e) {
             DB::rollBack();
             $this->error('Import failed, nothing was written: '.$e->getMessage());
@@ -188,5 +193,84 @@ class ImportSiteContent extends Command
             $this->count('article categories', $row->wasRecentlyCreated);
             $this->categories($item['children'] ?? [], $row->id);
         }
+    }
+
+    /**
+     * Articles from Markdown files with a simple «key: value» front matter:
+     * title, slug, published_at («Y-m-d H:i», display timezone), categories
+     * (comma-separated slugs), meta_title, meta_description, excerpt, status.
+     */
+    private function articles(string $directory): void
+    {
+        $files = is_dir($directory) ? glob(rtrim($directory, '/').'/*.md') : [];
+        sort($files);
+
+        foreach ($files as $file) {
+            [$meta, $body] = $this->parseFrontMatter((string) file_get_contents($file), basename($file));
+
+            $existing = Article::query()->where('slug', $meta['slug'])->exists();
+            if ($existing) {
+                $this->count('articles', false);
+
+                continue;
+            }
+
+            $status = ($meta['status'] ?? 'draft') === 'published' ? 'published' : 'draft';
+            $publishedAt = isset($meta['published_at'])
+                ? Carbon::createFromFormat('Y-m-d H:i', $meta['published_at'], (string) config('app.display_timezone', 'Asia/Tehran'))->utc()
+                : null;
+            if ($status === 'published' && $publishedAt === null) {
+                throw new RuntimeException(basename($file).': published articles need published_at');
+            }
+
+            $article = Article::query()->create([
+                'title' => $meta['title'],
+                'slug' => $meta['slug'],
+                'excerpt' => $meta['excerpt'] ?? null,
+                'body' => $body,
+                'status' => $status,
+                'published_at' => $publishedAt,
+                'meta_title' => $meta['meta_title'] ?? null,
+                'meta_description' => $meta['meta_description'] ?? null,
+            ]);
+
+            $slugs = array_filter(array_map('trim', explode(',', $meta['categories'] ?? '')));
+            $categories = ArticleCategory::query()->whereIn('slug', $slugs)->pluck('id', 'slug');
+            if ($missing = array_diff($slugs, $categories->keys()->all())) {
+                throw new RuntimeException(basename($file).': unknown categories '.implode(', ', $missing));
+            }
+            $article->categories()->sync($categories->values()->all());
+
+            $this->count('articles', true);
+        }
+    }
+
+    /** @return array{0: array<string, string>, 1: string} */
+    private function parseFrontMatter(string $content, string $name): array
+    {
+        $content = str_replace("\r\n", "\n", $content);
+        if (! preg_match('/\A---\n(.*?)\n---\n(.*)\z/s', $content, $m)) {
+            throw new RuntimeException("{$name}: missing front matter");
+        }
+
+        $meta = [];
+        foreach (explode("\n", $m[1]) as $line) {
+            if (trim($line) === '') {
+                continue;
+            }
+            [$key, $value] = array_pad(explode(':', $line, 2), 2, null);
+            if ($value === null) {
+                throw new RuntimeException("{$name}: invalid front matter line «{$line}»");
+            }
+            $meta[trim($key)] = trim($value);
+        }
+
+        foreach (['title', 'slug'] as $required) {
+            if (empty($meta[$required])) {
+                throw new RuntimeException("{$name}: front matter needs {$required}");
+            }
+        }
+
+        return [$meta, trim($m[2])."\n"];
     }
 }

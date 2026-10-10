@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Console;
 
+use App\Models\Article;
 use App\Models\ArticleCategory;
 use App\Models\Certification;
 use App\Models\Experience;
@@ -81,7 +82,42 @@ class ImportSiteContentTest extends TestCase
             'profiles' => Profile::query()->count(), 'experiences' => Experience::query()->count(),
             'certifications' => Certification::query()->count(), 'skills' => Skill::query()->count(),
             'groups' => ServiceGroup::query()->count(), 'services' => Service::query()->count(),
-            'categories' => ArticleCategory::query()->count(),
+            'categories' => ArticleCategory::query()->count(), 'articles' => Article::query()->count(),
         ];
+    }
+
+    public function test_migrated_articles_are_imported_with_categories_and_local_dates(): void
+    {
+        $this->artisan('app:import-site-content')->assertSuccessful();
+
+        $article = Article::query()->where('slug', 'learn-programming-for-beginners')->sole();
+        $this->assertTrue($article->isLive());
+        // 09:00 in Tehran (UTC+03:30) is stored as UTC.
+        $this->assertSame('2024-11-03 05:30:00', $article->published_at->utc()->format('Y-m-d H:i:s'));
+        $this->assertEqualsCanonicalizing(['programming-tutorials', 'software-development'], $article->categories->pluck('slug')->all());
+        $this->assertStringContainsString('<h2>', $article->body_html);
+        $this->assertNotNull($article->reading_minutes);
+
+        // No post links to the old .ir domain any more; images use site-relative /wp-content paths.
+        foreach (Article::query()->get() as $a) {
+            $this->assertStringNotContainsString('sajadmasoumi.ir', $a->body, $a->slug);
+        }
+    }
+
+    public function test_article_files_with_unknown_categories_roll_back_the_whole_import(): void
+    {
+        $dir = sys_get_temp_dir().'/articles-'.uniqid();
+        mkdir($dir);
+        file_put_contents($dir.'/bad.md', "---\ntitle: T\nslug: bad-post\npublished_at: 2024-01-01 10:00\ncategories: nope\nstatus: published\n---\nBody\n");
+
+        try {
+            $this->artisan('app:import-site-content', ['--articles' => $dir])->assertFailed();
+        } finally {
+            unlink($dir.'/bad.md');
+            rmdir($dir);
+        }
+
+        $this->assertSame(0, Article::query()->count());
+        $this->assertSame(0, Profile::query()->count());
     }
 }
