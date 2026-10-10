@@ -1,0 +1,20 @@
+# Secrets & environment (repository is PUBLIC)
+.env
+.env.*
+!.env.example
+auth.json
+
+# Host diagnostics output, dumps, backups, exports
+host-check-output*
+*.sql
+*.sql.gz
+*.dump
+*.bak
+/backups/
+wordpress-export*.xml
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
