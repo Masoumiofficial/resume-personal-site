@@ -4,8 +4,12 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="robots" content="noindex, nofollow">
-  <title>رزومهٔ {{ $profile->display_name }}</title>
+  @isset($seo)
+    @include('partials.seo')
+  @else
+    <meta name="robots" content="noindex, nofollow">
+    <title>رزومهٔ {{ $profile->display_name }}</title>
+  @endisset
   <link rel="preload" href="{{ asset('assets/fonts/Vazirmatn-wght.woff2') }}" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="{{ \App\Support\Asset::url('css/tokens.css') }}">
   <link rel="stylesheet" href="{{ \App\Support\Asset::url('css/resume.css') }}">
@@ -15,6 +19,12 @@
     <div class="resume-toolbar no-print" role="region" aria-label="ابزار پیش‌نمایش">
       <a href="{{ route('admin.dashboard') }}">→ پنل مدیریت</a>
       <span>پیش‌نمایش رزومه؛ فقط موارد «نمایش» دیده می‌شوند.</span>
+      <button type="button" data-print>چاپ / ذخیره به PDF</button>
+    </div>
+  @else
+    <div class="resume-toolbar no-print" role="region" aria-label="ابزار رزومه">
+      <a href="{{ \App\Support\Link::route('home') }}">→ بازگشت به سایت</a>
+      <span>برای نسخهٔ PDF، گزینهٔ «ذخیره به PDF» را در پنجرهٔ چاپ انتخاب کنید.</span>
       <button type="button" data-print>چاپ / ذخیره به PDF</button>
     </div>
   @endif

@@ -11,7 +11,8 @@ use Symfony\Component\HttpFoundation\Response;
  * (/what-is-wordpress/), so every existing URL keeps answering 200 without a
  * redirect. Requests without the slash get ONE 301 to the slashed form.
  *
- * Not applied to: the home page, the admin panel and auth routes, files with
+ * Not applied to: the fallback route (see ArticleController), the home page,
+ * the admin panel and auth routes, files with
  * an extension (sitemap.xml, robots.txt, images), the /up health check, and
  * non-GET/HEAD requests (forms must never be redirected).
  */
@@ -39,6 +40,12 @@ class CanonicalTrailingSlash
     private function applies(Request $request): bool
     {
         if (! $request->isMethod('GET') && ! $request->isMethod('HEAD')) {
+            return false;
+        }
+
+        // Fallback route (root article permalinks): unknown paths must 404 directly,
+        // not 301 first; ArticleController adds the slash only for real articles.
+        if ($request->route()?->isFallback) {
             return false;
         }
 

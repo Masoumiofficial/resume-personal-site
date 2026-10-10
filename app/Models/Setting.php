@@ -19,6 +19,7 @@ class Setting extends Model
         'site_title' => 'سجاد معصومی',
         'title_separator' => '|',
         'default_meta_description' => null,
+        'search_indexing' => true,
         'footer_note' => null,
         'contact_form_enabled' => true,
         'message_retention_days' => 365,

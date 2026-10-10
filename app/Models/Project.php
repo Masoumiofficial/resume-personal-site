@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Concerns\Publishable;
 use App\Models\Concerns\Sortable;
+use App\Support\Link;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -42,5 +43,10 @@ class Project extends Model
     public function cover(): BelongsTo
     {
         return $this->belongsTo(Media::class, 'cover_id');
+    }
+
+    public function url(): string
+    {
+        return Link::route('works.show', $this->slug);
     }
 }

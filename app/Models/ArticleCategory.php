@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Concerns\Sortable;
+use App\Support\Link;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -23,5 +24,10 @@ class ArticleCategory extends Model
     public function articles(): BelongsToMany
     {
         return $this->belongsToMany(Article::class, 'article_category');
+    }
+
+    public function url(): string
+    {
+        return Link::route('blog.category', $this->slug);
     }
 }

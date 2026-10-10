@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Concerns\Publishable;
+use App\Support\Link;
 use App\Support\Markdown;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -46,5 +47,11 @@ class Article extends Model
     public function cover(): BelongsTo
     {
         return $this->belongsTo(Media::class, 'cover_id');
+    }
+
+    /** Articles live at the site root, like the WordPress permalinks they replace: /{slug}/ */
+    public function url(): string
+    {
+        return Link::to(rawurlencode($this->slug));
     }
 }

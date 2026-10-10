@@ -3,24 +3,42 @@
 namespace App\Http\Controllers;
 
 use App\Models\ContactMessage;
+use App\Models\Profile;
 use App\Models\Setting;
 use App\Support\ContactForm;
 use App\Support\IpHash;
+use App\Support\Link;
+use App\Support\Seo;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\View\View;
 
 /**
- * Public contact form submission. The form itself is rendered by the public
- * site (Phase 4). Bots get the same "sent" response as humans, so the
- * filters cannot be probed.
+ * Public contact page and form submission. Bots get the same "sent"
+ * response as humans, so the filters cannot be probed.
  */
 class ContactController extends Controller
 {
+    public function create(): View
+    {
+        $profile = Profile::current();
+        $seo = Seo::make('تماس با من', 'راه‌های ارتباط با '.$profile->display_name.' و فرم ارسال پیام برای مشاوره و شروع پروژه.')
+            ->canonical(Link::route('contact'));
+        $seo->schema(['@type' => 'ContactPage', 'name' => 'تماس با '.$profile->display_name, 'url' => Link::route('contact')]);
+
+        return view('site.contact', [
+            'seo' => $seo,
+            'profile' => $profile,
+            'formEnabled' => (bool) Setting::get('contact_form_enabled'),
+            'token' => ContactForm::token(),
+        ]);
+    }
+
     public function store(Request $request): RedirectResponse
     {
         if (! Setting::get('contact_form_enabled')) {
-            return back()->with('contact_error', 'فرم تماس موقتاً غیرفعال است. لطفاً از ایمیل استفاده کنید.');
+            return redirect()->to(Link::route('contact'))->with('contact_error', 'فرم تماس موقتاً غیرفعال است. لطفاً از ایمیل استفاده کنید.');
         }
 
         $data = $request->validate([
@@ -30,7 +48,7 @@ class ContactController extends Controller
             'message' => ['required', 'string', 'min:10', 'max:5000'],
         ]);
 
-        $sent = back()->with('contact_status', 'sent');
+        $sent = redirect()->to(Link::route('contact'))->with('contact_status', 'sent');
 
         // Honeypot filled or token missing/forged: almost certainly automated — drop silently.
         $elapsed = ContactForm::elapsed($request->input(ContactForm::TOKEN));

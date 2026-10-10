@@ -44,6 +44,7 @@ class SettingsController extends ResourceController
             ['name' => 'site_title', 'label' => 'عنوان سایت', 'type' => 'text', 'required' => true],
             ['name' => 'title_separator', 'label' => 'جداکنندهٔ عنوان صفحه', 'type' => 'text', 'required' => true, 'rules' => ['string', 'max:3']],
             ['name' => 'default_meta_description', 'label' => 'توضیح متای پیش‌فرض', 'type' => 'textarea', 'rows' => 2, 'rules' => ['string', 'max:170']],
+            ['name' => 'search_indexing', 'label' => 'اجازهٔ ایندکس در موتورهای جست‌وجو', 'type' => 'checkbox', 'hint' => 'فقط در محیط production اثر دارد؛ نسخه‌های آزمایشی همیشه noindex هستند.'],
             ['name' => 'footer_note', 'label' => 'متن فوتر', 'type' => 'text'],
             ['name' => 'home_show_services', 'label' => 'صفحهٔ اصلی: بخش خدمات', 'type' => 'checkbox'],
             ['name' => 'home_show_projects', 'label' => 'صفحهٔ اصلی: نمونه‌کارهای منتخب (اگر خالی باشد خودکار پنهان است)', 'type' => 'checkbox'],

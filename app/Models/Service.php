@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Concerns\Publishable;
 use App\Models\Concerns\Sortable;
 use App\Support\Jalali;
+use App\Support\Link;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -48,5 +49,11 @@ class Service extends Model
         };
 
         return 'شروع از '.Jalali::number($this->price_from).' تومان'.$unit;
+    }
+
+    /** Only services with their own page have a URL; the rest link to the contact form or cta_url. */
+    public function url(): ?string
+    {
+        return $this->has_page && $this->slug ? Link::route('services.show', $this->slug) : null;
     }
 }

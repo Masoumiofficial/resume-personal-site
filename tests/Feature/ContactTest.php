@@ -6,6 +6,7 @@ use App\Models\ContactMessage;
 use App\Models\Setting;
 use App\Models\User;
 use App\Support\ContactForm;
+use App\Support\Link;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Crypt;
@@ -28,7 +29,7 @@ class ContactTest extends TestCase
     public function test_valid_message_is_stored_with_a_hashed_ip_only(): void
     {
         $this->from('/contact/')->post('/contact/', $this->payload(), ['REMOTE_ADDR' => '203.0.113.9'])
-            ->assertRedirect('/contact/')->assertSessionHas('contact_status', 'sent');
+            ->assertHeader('Location', Link::route('contact'))->assertSessionHas('contact_status', 'sent');
 
         $m = ContactMessage::query()->sole();
         $this->assertSame(['new', 'maryam@example.com'], [$m->status, $m->email]);
