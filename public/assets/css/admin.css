@@ -77,12 +77,14 @@
 .auth__brand { display: flex; align-items: center; gap: var(--space-3); margin-block-end: var(--space-6); font-weight: var(--weight-bold); }
 .auth__title { font-size: var(--text-xl); margin-block-end: var(--space-2); }
 .auth__lead { color: var(--color-text-muted); font-size: var(--text-sm); margin-block-end: var(--space-5); }
+.auth__card form > .btn { inline-size: 100%; }
+.auth__card .checkbox { display: flex; }
 .auth__links { display: flex; justify-content: space-between; gap: var(--space-3); font-size: var(--text-sm); margin-block-start: var(--space-5); }
 
 /* ---- Security page ------------------------------------------------------ */
 .qr { display: inline-block; padding: var(--space-3); background: #fff; border-radius: var(--radius-md); line-height: 0; }
 .qr svg { inline-size: 12rem; block-size: 12rem; }
-.recovery-codes { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-2); padding: var(--space-4); background: var(--color-bg-subtle); border-radius: var(--radius-md); font-family: ui-monospace, monospace; font-size: var(--text-sm); direction: ltr; }
+ul.recovery-codes { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-2); padding: var(--space-4); background: var(--color-bg-subtle); border-radius: var(--radius-md); font-family: ui-monospace, monospace; font-size: var(--text-sm); direction: ltr; }
 .activity-list { display: grid; gap: var(--space-2); font-size: var(--text-sm); }
 .activity-list li { display: flex; justify-content: space-between; gap: var(--space-3); padding-block: var(--space-2); border-block-end: 1px solid var(--color-border); }
 .activity-list li:last-child { border-block-end: 0; }
