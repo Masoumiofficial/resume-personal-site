@@ -4,8 +4,10 @@ namespace App\Console\Commands;
 
 use App\Models\Setting;
 use App\Models\User;
+use App\Support\Backup;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Schema;
 use Throwable;
 
@@ -135,13 +137,30 @@ class CheckProduction extends Command
 
     private function filesystem(): void
     {
-        foreach (['storage/framework/cache', 'storage/framework/sessions', 'storage/framework/views', 'storage/logs', 'bootstrap/cache', 'public/media'] as $dir) {
+        foreach (['storage/framework/cache', 'storage/framework/sessions', 'storage/framework/views', 'storage/logs', 'bootstrap/cache'] as $dir) {
             $path = base_path($dir);
             $this->add(is_dir($path) && is_writable($path), "Writable: {$dir}");
         }
+        $media = public_path('media');
+        $this->add(is_dir($media) && is_writable($media), 'Writable: public/media', $media);
+
+        $this->add(! is_file(storage_path(CreateAdmin::PASSWORD_FILE)), 'Generated admin password file deleted', 'storage/'.CreateAdmin::PASSWORD_FILE);
+
+        $backups = File::glob(Backup::directory().'/db-*.jsonl.gz');
+        $latest = $backups === [] ? null : max(array_map('filemtime', $backups));
+        $this->add(
+            $latest !== null && $latest > time() - 2 * 86400 ? 'ok' : 'warn',
+            'Recent database backup',
+            $latest === null ? 'none yet — run php artisan app:backup and check the schedule:run cron' : 'latest '.date('Y-m-d H:i', $latest),
+        );
         foreach (['.env', 'storage', 'vendor'] as $private) {
             $this->add(! file_exists(public_path($private)), "Not inside public/: {$private}");
         }
         $this->add(is_file(public_path('media/.htaccess')), 'public/media/.htaccess (no script execution)');
+        $this->add(is_file(public_path('wp-content/uploads/.htaccess')), 'public/wp-content/uploads/.htaccess (images/PDF only)');
+        $this->add(is_file(public_path('index.php')) && is_file(public_path('.htaccess')), 'Web root has index.php and .htaccess', public_path());
+        $base = realpath(base_path()) ?: base_path();
+        $public = realpath(public_path()) ?: public_path();
+        $this->add(! str_starts_with($base.DIRECTORY_SEPARATOR, $public.DIRECTORY_SEPARATOR), 'Project is not inside the web root', $base);
     }
 }

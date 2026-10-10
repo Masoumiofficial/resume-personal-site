@@ -36,3 +36,4 @@ Thumbs.db
 _ide_helper.php
 /database/*.sqlite
 /database/*.sqlite-journal
+/bootstrap/public-path.php

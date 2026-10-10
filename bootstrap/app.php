@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-return Application::configure(basePath: dirname(__DIR__))
+$app = Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
         web: __DIR__.'/../routes/web.php',
         commands: __DIR__.'/../routes/console.php',
@@ -35,3 +35,13 @@ return Application::configure(basePath: dirname(__DIR__))
             fn (Request $request) => $request->is('api/*') || $request->expectsJson(),
         );
     })->create();
+
+// Split layout (document root cannot point at public/, D36): the deploy
+// creates bootstrap/public-path.php returning the absolute path of the web
+// root (e.g. ~/domains/example.com/public_html). Read here — before config is
+// loaded — so web requests, artisan/cron and the cached config all agree.
+if (is_file(__DIR__.'/public-path.php')) {
+    $app->usePublicPath(require __DIR__.'/public-path.php');
+}
+
+return $app;

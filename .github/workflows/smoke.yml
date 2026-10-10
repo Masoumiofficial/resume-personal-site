@@ -1,0 +1,51 @@
+name: Smoke test (deployed site)
+
+# Run manually from the Actions tab after every deploy (D38):
+#   Actions → "Smoke test (deployed site)" → Run workflow → enter the URL.
+# Read-only HTTP checks (tools/smoke/smoke.php); GitHub's runners can reach
+# the host even though the development sandbox cannot.
+on:
+  workflow_dispatch:
+    inputs:
+      url:
+        description: 'Site origin, e.g. https://staging.sajadmasoumi.com (no trailing slash)'
+        required: true
+        default: 'https://sajadmasoumi.com'
+      expect_indexing:
+        description: 'Live site: fail if noindex is sent'
+        type: boolean
+        default: false
+      admin_path:
+        description: 'Admin path (ADMIN_PATH)'
+        default: 'admin'
+      insecure:
+        description: 'Accept an invalid TLS certificate (staging only)'
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    name: Smoke test
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: curl
+          coverage: none
+      - name: Run checks
+        env:
+          URL: ${{ inputs.url }}
+          ADMIN_PATH: ${{ inputs.admin_path }}
+          EXPECT_INDEXING: ${{ inputs.expect_indexing }}
+          INSECURE: ${{ inputs.insecure }}
+        run: |
+          args=("$URL" "--admin-path=$ADMIN_PATH")
+          [ "$EXPECT_INDEXING" = "true" ] && args+=(--expect-indexing)
+          [ "$INSECURE" = "true" ] && args+=(--insecure)
+          php tools/smoke/smoke.php "${args[@]}"

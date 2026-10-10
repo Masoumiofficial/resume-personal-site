@@ -10,3 +10,8 @@ use Illuminate\Support\Facades\Schedule;
 
 // Contact-message retention (settings.message_retention_days; spam after 30 days).
 Schedule::command('model:prune', ['--model' => [ContactMessage::class]])->daily()->at('03:30');
+
+// Backups (D35): database daily, database + media weekly. Kept in
+// storage/app/backups (config/backup.php); download copies off the server.
+Schedule::command('app:backup')->daily()->at('03:00');
+Schedule::command('app:backup', ['--media'])->weekly()->sundays()->at('03:10');

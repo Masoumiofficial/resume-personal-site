@@ -1,0 +1,16 @@
+# Legacy WordPress uploads (copied from the old site so old image URLs inside
+# articles and on other websites keep working — D37). Images and PDFs only;
+# everything else (logs, plugin caches, scripts, archives) is refused.
+Options -Indexes -ExecCGI
+<IfModule mod_php.c>
+    php_flag engine off
+</IfModule>
+RemoveHandler .php .phtml .php3 .php4 .php5 .php7 .php8 .phar .pht .phps .cgi .pl .py .sh
+RemoveType .php .phtml .php3 .php4 .php5 .php7 .php8 .phar .pht .phps
+Require all denied
+<FilesMatch "(?i)\.(jpe?g|png|gif|webp|avif|ico|pdf)$">
+    Require all granted
+</FilesMatch>
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+</IfModule>
