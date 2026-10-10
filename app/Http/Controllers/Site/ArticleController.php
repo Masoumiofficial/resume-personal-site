@@ -35,11 +35,25 @@ class ArticleController extends Controller
             return redirect()->to($article->url().($query ? '?'.$query : ''), 301);
         }
 
+        return $this->render($article);
+    }
+
+    /**
+     * Article page. $preview: admin-only draft preview (D32) — same template,
+     * never indexed, with a banner; the in-memory date is not saved.
+     */
+    public function render(Article $article, bool $preview = false): View
+    {
+        if ($preview && $article->published_at === null) {
+            $article->setAttribute('published_at', now());
+        }
+
         $profile = Profile::current();
         $modified = $article->updated_content_at ?? $article->published_at;
 
         $seo = Seo::make()->fromModel($article, $article->title, $article->excerpt)->canonical($article->url())->image($article->cover);
         $seo->type = 'article';
+        $seo->noindex = $seo->noindex || $preview;
         $seo->publishedTime = $article->published_at->toAtomString();
         $seo->modifiedTime = $modified->toAtomString();
         $seo->schema(array_filter([
@@ -70,6 +84,7 @@ class ArticleController extends Controller
             'profile' => $profile,
             'modified' => $modified->gt($article->published_at->copy()->addDay()) ? $modified : null,
             'related' => $related,
+            'preview' => $preview,
         ]);
     }
 }

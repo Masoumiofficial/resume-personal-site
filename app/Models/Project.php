@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Concerns\Publishable;
+use App\Models\Concerns\RedirectsOldSlug;
 use App\Models\Concerns\Sortable;
 use App\Support\Link;
 use Illuminate\Database\Eloquent\Model;
@@ -13,7 +14,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Project extends Model
 {
-    use Publishable, SoftDeletes, Sortable;
+    use Publishable, RedirectsOldSlug, SoftDeletes, Sortable;
 
     protected $fillable = ['title', 'slug', 'summary', 'body', 'problem', 'solution', 'role', 'technologies', 'outcome', 'outcome_evidence_url', 'outcome_verified', 'project_url', 'client_name', 'year', 'cover_id', 'is_featured', 'sort_order', 'status', 'published_at', 'meta_title', 'meta_description', 'og_image_id', 'canonical_url', 'noindex'];
 
@@ -48,5 +49,15 @@ class Project extends Model
     public function url(): string
     {
         return Link::route('works.show', $this->slug);
+    }
+
+    public static function slugPath(string $slug): string
+    {
+        return '/works/'.$slug.'/';
+    }
+
+    protected function wasPublic(): bool
+    {
+        return $this->getOriginal('status') === 'published';
     }
 }

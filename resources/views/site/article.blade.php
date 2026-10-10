@@ -9,6 +9,15 @@
 
 @section('content')
 <article class="article">
+  @if ($preview ?? false)
+    <div class="preview-banner" role="status">
+      <div class="container container--narrow preview-banner__inner">
+        <strong>پیش‌نمایش</strong>
+        <span>{{ $article->status === 'published' && $article->published_at?->isPast() ? 'این مقاله منتشر شده است.' : 'این مقاله هنوز منتشر نشده و فقط شما آن را می‌بینید.' }}</span>
+        <a href="{{ route('admin.articles.edit', $article->id) }}">بازگشت به ویرایش</a>
+      </div>
+    </div>
+  @endif
   @include('site.partials.page-head', [
     'title' => $article->title,
     'crumbs' => array_filter(['مقالات' => \App\Support\Link::route('blog.index')] + ($category ? [$category->name => $category->url()] : [])) + [$article->title => null],

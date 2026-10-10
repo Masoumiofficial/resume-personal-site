@@ -296,3 +296,8 @@ ul.pager__pages { display: flex; gap: var(--space-1); margin: 0; padding: 0; lis
   .card, .price-row, tr { break-inside: avoid; }
   @page { margin: 16mm 14mm; }
 }
+
+/* Admin draft preview banner (D32) */
+.preview-banner { background: var(--color-warning-soft); border-block-end: 1px solid var(--color-border); padding-block: var(--space-3); }
+.preview-banner__inner { display: flex; flex-wrap: wrap; gap: var(--space-2) var(--space-4); align-items: baseline; font-size: var(--text-sm); }
+.preview-banner a { margin-inline-start: auto; font-weight: var(--weight-bold); }

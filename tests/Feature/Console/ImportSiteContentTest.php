@@ -7,10 +7,13 @@ use App\Models\ArticleCategory;
 use App\Models\Certification;
 use App\Models\Experience;
 use App\Models\Profile;
+use App\Models\Redirect;
 use App\Models\Service;
 use App\Models\ServiceGroup;
 use App\Models\Skill;
+use Illuminate\Contracts\Http\Kernel as HttpKernel;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\Request;
 use Tests\TestCase;
 
 class ImportSiteContentTest extends TestCase
@@ -123,5 +126,31 @@ class ImportSiteContentTest extends TestCase
 
         $this->assertSame(0, Article::query()->count());
         $this->assertSame(0, Profile::query()->count());
+    }
+
+    public function test_old_url_redirects_are_imported_and_every_301_lands_on_a_live_page(): void
+    {
+        $this->artisan('app:import-site-content')->assertSuccessful();
+        $this->artisan('app:import-site-content')->assertSuccessful();   // idempotent
+
+        $this->assertSame(59, Redirect::query()->count());
+        $this->assertSame(33, Redirect::query()->where('status_code', 410)->count());
+        $this->assertSame(0, Redirect::query()->whereIn('to_url', ['/', ''])->count());   // nothing to the home page
+
+        $kernel = $this->app->make(HttpKernel::class);
+        foreach (Redirect::query()->where('status_code', 301)->get() as $rule) {
+            $old = $kernel->handle(Request::create('http://localhost'.Redirect::encodePath(rtrim($rule->from_path, '*'))));
+            $this->assertSame(301, $old->getStatusCode(), $rule->from_path);
+
+            $target = $kernel->handle(Request::create($old->headers->get('Location')));
+            $this->assertSame(200, $target->getStatusCode(), $rule->from_path.' → '.$old->headers->get('Location'));
+        }
+        foreach (['/cart/', '/xmlrpc.php', '/wp-login.php', '/wp-admin/admin-ajax.php', '/wp-json/wp/v2/users'] as $gone) {
+            $this->assertSame(410, $kernel->handle(Request::create('http://localhost'.$gone))->getStatusCode(), $gone);
+        }
+        // URLs the new site still serves are not in the redirect list.
+        foreach (['/learn-programming-for-beginners/', '/blog/', '/feed/'] as $kept) {
+            $this->assertSame(200, $kernel->handle(Request::create('http://localhost'.$kept))->getStatusCode(), $kept);
+        }
     }
 }

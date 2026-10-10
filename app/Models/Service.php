@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Concerns\Publishable;
+use App\Models\Concerns\RedirectsOldSlug;
 use App\Models\Concerns\Sortable;
 use App\Support\Jalali;
 use App\Support\Link;
@@ -11,7 +12,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Service extends Model
 {
-    use Publishable, Sortable;
+    use Publishable, RedirectsOldSlug, Sortable;
 
     public const UNITS = ['once' => 'یک‌باره', 'monthly' => 'ماهانه', 'hourly' => 'ساعتی'];
 
@@ -55,5 +56,15 @@ class Service extends Model
     public function url(): ?string
     {
         return $this->has_page && $this->slug ? Link::route('services.show', $this->slug) : null;
+    }
+
+    public static function slugPath(string $slug): string
+    {
+        return '/services/'.$slug.'/';
+    }
+
+    protected function wasPublic(): bool
+    {
+        return $this->getOriginal('status') === 'published' && (bool) $this->getOriginal('has_page');
     }
 }

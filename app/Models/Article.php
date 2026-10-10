@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Concerns\Publishable;
+use App\Models\Concerns\RedirectsOldSlug;
 use App\Support\Link;
 use App\Support\Markdown;
 use Illuminate\Database\Eloquent\Model;
@@ -12,7 +13,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Article extends Model
 {
-    use Publishable, SoftDeletes;
+    use Publishable, RedirectsOldSlug, SoftDeletes;
 
     protected $fillable = ['title', 'slug', 'excerpt', 'body', 'cover_id', 'status', 'published_at', 'updated_content_at', 'legacy_wp_id', 'meta_title', 'meta_description', 'og_image_id', 'canonical_url', 'noindex'];
 
@@ -53,5 +54,15 @@ class Article extends Model
     public function url(): string
     {
         return Link::to(rawurlencode($this->slug));
+    }
+
+    public static function slugPath(string $slug): string
+    {
+        return '/'.$slug.'/';
+    }
+
+    protected function wasPublic(): bool
+    {
+        return $this->getOriginal('status') === 'published';
     }
 }

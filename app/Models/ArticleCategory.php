@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\RedirectsOldSlug;
 use App\Models\Concerns\Sortable;
 use App\Support\Link;
 use Illuminate\Database\Eloquent\Model;
@@ -10,7 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class ArticleCategory extends Model
 {
-    use Sortable;
+    use RedirectsOldSlug, Sortable;
 
     protected $fillable = ['name', 'slug', 'parent_id', 'description', 'sort_order'];
 
@@ -29,5 +30,10 @@ class ArticleCategory extends Model
     public function url(): string
     {
         return Link::route('blog.category', $this->slug);
+    }
+
+    public static function slugPath(string $slug): string
+    {
+        return '/blog/category/'.$slug.'/';
     }
 }

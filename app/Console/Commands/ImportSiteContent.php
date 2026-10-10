@@ -7,6 +7,7 @@ use App\Models\ArticleCategory;
 use App\Models\Certification;
 use App\Models\Experience;
 use App\Models\Profile;
+use App\Models\Redirect;
 use App\Models\Service;
 use App\Models\ServiceGroup;
 use App\Models\Skill;
@@ -20,7 +21,8 @@ use RuntimeException;
 /**
  * One-time (but safely repeatable) import of the old site's content from
  * database/content/sajadmasoumi-com.php, plus the migrated blog posts in
- * database/content/articles/*.md (front matter + Markdown body).
+ * database/content/articles/*.md (front matter + Markdown body) and the
+ * redirect rules for the old URLs in database/content/redirects.php (D31).
  *
  * Idempotent: rows are matched by a natural key (organization, title, slug,
  * name) and only created when missing. Existing rows are never changed, so
@@ -28,9 +30,9 @@ use RuntimeException;
  */
 class ImportSiteContent extends Command
 {
-    protected $signature = 'app:import-site-content {--file= : Path to the content file} {--articles= : Directory of article Markdown files} {--dry-run : Show what would be created without writing}';
+    protected $signature = 'app:import-site-content {--file= : Path to the content file} {--articles= : Directory of article Markdown files} {--redirects= : Path to the redirect rules file} {--dry-run : Show what would be created without writing}';
 
-    protected $description = 'Import the profile, resume, services, categories and articles of the old WordPress site (create-only, idempotent)';
+    protected $description = 'Import the profile, resume, services, categories, articles and URL redirects of the old WordPress site (create-only, idempotent)';
 
     /** @var array<string, array{0:int,1:int}> section => [created, existing] */
     private array $counts = [];
@@ -56,6 +58,7 @@ class ImportSiteContent extends Command
             $this->services($data['service_groups'] ?? []);
             $this->categories($data['article_categories'] ?? []);
             $this->articles($this->option('articles') ?: database_path('content/articles'));
+            $this->redirects($this->option('redirects') ?: database_path('content/redirects.php'));
         } catch (\Throwable $e) {
             DB::rollBack();
             $this->error('Import failed, nothing was written: '.$e->getMessage());
@@ -246,6 +249,24 @@ class ImportSiteContent extends Command
     }
 
     /** @return array{0: array<string, string>, 1: string} */
+    /** Old-URL rules, matched by normalised path; existing rules (and their admin edits) are kept. */
+    private function redirects(string $file): void
+    {
+        if (! is_file($file)) {
+            return;
+        }
+        foreach (require $file as [$from, $to, $status, $note]) {
+            $hash = Redirect::hash(Redirect::normalize($from));
+            if (Redirect::query()->where('from_hash', $hash)->exists()) {
+                $this->count('redirects', false);
+
+                continue;
+            }
+            Redirect::query()->create(['from_path' => $from, 'to_url' => $to, 'status_code' => $status, 'note' => $note ?: null, 'is_active' => true]);
+            $this->count('redirects', true);
+        }
+    }
+
     private function parseFrontMatter(string $content, string $name): array
     {
         $content = str_replace("\r\n", "\n", $content);

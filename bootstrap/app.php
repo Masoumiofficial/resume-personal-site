@@ -2,11 +2,13 @@
 
 use App\Http\Middleware\CanonicalTrailingSlash;
 use App\Http\Middleware\SecurityHeaders;
+use App\Support\RedirectResolver;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -26,6 +28,9 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->web(append: [CanonicalTrailingSlash::class]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
+        // Old WordPress URLs and renamed slugs (D31): consulted only for would-be 404s.
+        $exceptions->render(fn (NotFoundHttpException $e, Request $request) => RedirectResolver::respond($request));
+
         $exceptions->shouldRenderJsonWhen(
             fn (Request $request) => $request->is('api/*') || $request->expectsJson(),
         );

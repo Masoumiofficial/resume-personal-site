@@ -57,12 +57,13 @@
                 @php $value = $column['value']($item); @endphp
                 @if ($column['primary'] ?? false)
                   <th scope="row" class="table__primary">
+                    @if ($column['ltr'] ?? false)@php $value = new \Illuminate\Support\HtmlString('<bdi dir="ltr">'.e($value).'</bdi>'); @endphp@endif
                     @if ($trashed){{ $value }}@else<a href="{{ route($route.'.edit', $item->getKey()) }}">{{ $value }}</a>@endif
                   </th>
                 @elseif ($column['badge'] ?? false)
                   <td>@if ($value)<span class="badge badge--{{ $value[0] }}">{{ $value[1] }}</span>@endif</td>
                 @else
-                  <td @class(['tabular' => $column['ltr'] ?? false, 'text-muted' => $column['muted'] ?? false])>{{ $value }}</td>
+                  <td @class(['tabular' => $column['ltr'] ?? false, 'text-muted' => $column['muted'] ?? false])>@if ($column['ltr'] ?? false)<bdi dir="ltr">{{ $value }}</bdi>@else{{ $value }}@endif</td>
                 @endif
               @endforeach
               <td>

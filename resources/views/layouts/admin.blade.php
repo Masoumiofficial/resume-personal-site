@@ -35,6 +35,7 @@
           ],
           'سیستم' => [
             ['admin.settings.edit', 'admin.settings.*', 'i-settings', 'تنظیمات'],
+            ['admin.redirects.index', 'admin.redirects.*', 'i-redirect', 'تغییرمسیرها'],
             ['admin.activity', 'admin.activity', 'i-list', 'گزارش فعالیت'],
             ['admin.security', 'admin.security', 'i-shield', 'امنیت حساب'],
           ],

@@ -256,6 +256,7 @@ abstract class ResourceController extends Controller
             'media' => $this->mediaOptions($fields),
             'title' => $item->exists ? $this->titleOf($item) : $this->labels()['create'],
             'aside' => $item->exists ? $this->aside($item) : null,
+            'links' => $item->exists ? $this->links($item) : [],
             'tabs' => $this->tabs(),
             'singleton' => $this->singleton(),
         ]);
@@ -265,6 +266,12 @@ abstract class ResourceController extends Controller
     protected function aside(Model $item): ?array
     {
         return null;
+    }
+
+    /** Buttons next to the form, e.g. "view on site" / "preview". @return list<array{0: string, 1: string}> label, url */
+    protected function links(Model $item): array
+    {
+        return [];
     }
 
     /** Single-record pages (profile, settings): no list, no delete. */

@@ -23,6 +23,7 @@ $resource = function (string $uri, string $controller): void {
 };
 
 $resource('articles', Admin\ArticleController::class);
+Route::get('articles/{id}/preview', [Admin\ArticleController::class, 'preview'])->whereNumber('id')->name('articles.preview');
 $resource('article-categories', Admin\ArticleCategoryController::class);
 $resource('tags', Admin\TagController::class);
 $resource('projects', Admin\ProjectController::class);
@@ -34,6 +35,7 @@ $resource('experiences', Admin\ExperienceController::class);
 $resource('educations', Admin\EducationController::class);
 $resource('skills', Admin\SkillController::class);
 $resource('certifications', Admin\CertificationController::class);
+$resource('redirects', Admin\RedirectController::class);
 
 // Single-record pages.
 Route::get('profile', [Admin\ProfileController::class, 'edit'])->name('profile.edit');

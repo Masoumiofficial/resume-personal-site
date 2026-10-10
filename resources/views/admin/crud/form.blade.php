@@ -30,6 +30,9 @@
 
     @if ($item->exists && ! $singleton)
       <aside class="form-aside">
+        @if ($links)
+          <div class="card cluster">@foreach ($links as [$label, $url])<a class="btn btn--ghost btn--sm" href="{{ $url }}" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-external"/></svg>{{ $label }}</a>@endforeach</div>
+        @endif
         @if ($aside)
           <div class="card stack stack--5">@foreach ($aside as $line)<p class="text-sm">{{ $line }}</p>@endforeach</div>
         @endif

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Site\ArticleController as SiteArticleController;
 use App\Models\Article;
 use App\Models\ArticleCategory;
 use App\Models\Tag;
@@ -11,6 +12,7 @@ use App\Support\Jalali;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Illuminate\View\View;
 
 class ArticleController extends ResourceController
 {
@@ -90,5 +92,23 @@ class ArticleController extends ResourceController
         }
 
         return $lines;
+    }
+
+    protected function links(Model $item): array
+    {
+        $links = [['پیش‌نمایش', route('admin.articles.preview', $item->getKey())]];
+        if (! $item->trashed() && $item->status === 'published' && $item->published_at?->isPast()) {
+            $links[] = ['مشاهده در سایت', $item->url()];
+        }
+
+        return $links;
+    }
+
+    /** Draft preview (D32): the public article template, admin-only, never cached or indexed. */
+    public function preview(int $id): View
+    {
+        $article = Article::withTrashed()->with('cover', 'categories', 'tags')->findOrFail($id);
+
+        return app(SiteArticleController::class)->render($article, preview: true);
     }
 }
