@@ -85,12 +85,15 @@ jobs:
 
       - name: Verify — HTTP smoke test against the package
         run: |
-          cd /tmp/verify/site
-          php -S 127.0.0.1:8080 -t public vendor/laravel/framework/src/Illuminate/Foundation/resources/server.php > /tmp/server.log 2>&1 &
+          cd /tmp/verify/site/public
+          # Laravel's router script resolves index.php from the working directory.
+          php -S 127.0.0.1:8080 ../vendor/laravel/framework/src/Illuminate/Foundation/resources/server.php > /tmp/server.log 2>&1 &
+          cd ..
           for i in $(seq 1 20); do curl -fsS -o /dev/null http://127.0.0.1:8080/up && break; sleep 0.5; done
           status=0
           php "$GITHUB_WORKSPACE/tools/smoke/smoke.php" http://127.0.0.1:8080 --admin-path=panel-ci --dev-server || status=$?
           if grep -hs "\.ERROR" storage/logs/*.log | head -5 | sed 's/^/::error title=Laravel log::/' | grep .; then exit 1; fi
+          if [ "$status" != 0 ]; then grep -iE "fatal|error|warning" /tmp/server.log | head -5 | sed 's/^/::error title=php -S::/'; fi
           exit $status
 
       - uses: actions/upload-artifact@v7
