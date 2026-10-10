@@ -43,6 +43,11 @@
     });
   });
 
+  // ---- Print button (resume) ----
+  document.querySelectorAll('[data-print]').forEach(function (btn) {
+    btn.addEventListener('click', function () { window.print(); });
+  });
+
   // ---- Confirm destructive actions (admin) ----
   document.addEventListener('submit', function (e) {
     var msg = e.target.getAttribute('data-confirm');

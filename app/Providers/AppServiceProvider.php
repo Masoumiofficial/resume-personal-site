@@ -3,13 +3,17 @@
 namespace App\Providers;
 
 use App\Listeners\RecordAuthenticationActivity;
+use App\Support\IpHash;
 use Illuminate\Auth\Events\Failed;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Auth\Events\Logout;
 use Illuminate\Auth\Events\PasswordReset;
+use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
@@ -43,6 +47,13 @@ class AppServiceProvider extends ServiceProvider
         if ($this->app->isProduction() && str_starts_with((string) config('app.url'), 'https://')) {
             URL::forceScheme('https');
         }
+
+        // Public contact form: 3 per 10 minutes per IP, and a global daily cap
+        // so a botnet cannot flood the inbox. Keys use the keyed IP hash.
+        RateLimiter::for('contact', fn (Request $request) => [
+            Limit::perMinutes(10, 3)->by('contact:'.IpHash::make($request->ip())),
+            Limit::perDay(100)->by('contact:global'),
+        ]);
 
         foreach ([
             Login::class, Failed::class, Lockout::class, Logout::class, PasswordReset::class, PasswordUpdatedViaController::class,
