@@ -10,8 +10,7 @@ use Illuminate\View\View;
 
 /**
  * Real numbers only: every figure is a COUNT on an actual table. No charts or
- * placeholders. Content counts come from the tables directly because the
- * content models arrive in Phase 3.
+ * placeholders.
  */
 class DashboardController extends Controller
 {
@@ -40,7 +39,7 @@ class DashboardController extends Controller
             $alerts[] = ['type' => 'danger', 'text' => 'حالت دیباگ (APP_DEBUG) در محیط production روشن است و جزئیات خطا را فاش می‌کند.', 'link' => null, 'link_text' => null];
         }
 
-        $activity = ActivityLog::query()->latest('id')->limit(10)->get(['id', 'event', 'created_at']);
+        $activity = ActivityLog::query()->latest('id')->limit(10)->get(['id', 'event', 'properties', 'created_at']);
 
         return view('admin.dashboard', compact('stats', 'alerts', 'activity'));
     }

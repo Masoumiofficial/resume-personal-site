@@ -16,4 +16,24 @@ return [
         'recovery_code_used' => 'ورود با کد بازیابی',
         'admin_created' => 'ایجاد حساب مدیر',
     ],
+    'content' => [
+        'created' => 'ایجاد محتوا',
+        'updated' => 'ویرایش محتوا',
+        'deleted' => 'حذف محتوا',
+        'restored' => 'بازیابی محتوا',
+        'force_deleted' => 'حذف دائمی محتوا',
+        'imported' => 'درون‌ریزی محتوای سایت قبلی',
+    ],
+    'media' => [
+        'uploaded' => 'بارگذاری فایل',
+        'updated' => 'ویرایش فایل',
+        'deleted' => 'حذف فایل',
+    ],
+    'message' => [
+        'status_changed' => 'تغییر وضعیت پیام',
+        'deleted' => 'حذف پیام',
+    ],
+    'settings' => [
+        'updated' => 'ویرایش تنظیمات',
+    ],
 ];

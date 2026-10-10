@@ -88,3 +88,56 @@ ul.recovery-codes { display: grid; grid-template-columns: repeat(2, minmax(0, 1f
 .activity-list { display: grid; gap: var(--space-2); font-size: var(--text-sm); }
 .activity-list li { display: flex; justify-content: space-between; gap: var(--space-3); padding-block: var(--space-2); border-block-end: 1px solid var(--color-border); }
 .activity-list li:last-child { border-block-end: 0; }
+
+/* ---- CRUD: list toolbar, tabs, forms (Phase 3) ---- */
+.toolbar { display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center; justify-content: space-between; }
+.toolbar__filters, .toolbar__actions { display: flex; flex-wrap: wrap; gap: var(--space-2); align-items: center; }
+.toolbar__filters .input { inline-size: auto; min-inline-size: 10rem; }
+.input--sm { min-block-size: 2.25rem; padding-block: var(--space-1); font-size: var(--text-sm); }
+.table__primary { font-weight: var(--weight-medium); text-align: start; }
+.table__primary a { color: var(--color-text); text-decoration: none; }
+.table__primary a:hover { color: var(--color-accent); text-decoration: underline; }
+.row-actions form { display: inline-flex; }
+
+.tabs { display: flex; flex-wrap: wrap; gap: var(--space-1); border-block-end: 1px solid var(--color-border); }
+.tabs__link { padding: var(--space-2) var(--space-3); font-size: var(--text-sm); font-weight: var(--weight-medium); color: var(--color-text-muted); text-decoration: none; border-block-end: 2px solid transparent; margin-block-end: -1px; }
+.tabs__link:hover { color: var(--color-text); }
+.tabs__link[aria-current="page"] { color: var(--color-accent); border-block-end-color: var(--color-accent); }
+
+.form-layout { display: grid; gap: var(--space-6); grid-template-columns: minmax(0, 1fr) 18rem; align-items: start; }
+.form-grid { display: grid; gap: var(--space-5); grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.form-grid__wide, .form-grid__actions { grid-column: 1 / -1; }
+.form-grid__actions { display: flex; gap: var(--space-2); padding-block-start: var(--space-2); border-block-start: 1px solid var(--color-border); }
+.form-aside { display: grid; gap: var(--space-4); position: sticky; inset-block-start: 5rem; }
+.textarea--code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: var(--text-sm); line-height: 1.8; }
+.checklist { display: flex; flex-wrap: wrap; gap: var(--space-2) var(--space-5); border: 0; padding: 0; margin: 0; }
+.checklist legend { inline-size: 100%; margin-block-end: var(--space-2); }
+
+.pagination { display: flex; gap: var(--space-3); align-items: center; justify-content: center; }
+.pagination [aria-disabled="true"] { opacity: .5; pointer-events: none; }
+
+@media (max-width: 64rem) {
+  .form-layout { grid-template-columns: minmax(0, 1fr); }
+  .form-aside { position: static; }
+}
+@media (max-width: 40rem) {
+  .form-grid { grid-template-columns: minmax(0, 1fr); }
+  .toolbar__filters .input { min-inline-size: 0; flex: 1 1 8rem; }
+}
+
+/* ---- Media library ---- */
+.media-grid { display: grid; gap: var(--space-4); grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr)); }
+.media-card { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-md); overflow: hidden; }
+.media-card__link { display: grid; gap: var(--space-1); color: inherit; text-decoration: none; padding-block-end: var(--space-3); }
+.media-card__link:hover .media-card__name { color: var(--color-accent); }
+.media-card__thumb { inline-size: 100%; aspect-ratio: 4 / 3; object-fit: cover; background: var(--color-bg-subtle); block-size: auto; }
+.media-card__thumb--doc { display: grid; place-items: center; align-content: center; gap: var(--space-1); color: var(--color-text-muted); font-weight: var(--weight-bold); font-size: var(--text-sm); }
+.media-card__thumb--doc svg { inline-size: 2rem; block-size: 2rem; }
+.media-card__name { padding-inline: var(--space-3); font-size: var(--text-sm); font-weight: var(--weight-medium); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.media-card__meta { padding-inline: var(--space-3); font-size: var(--text-xs); color: var(--color-text-muted); }
+.media-preview { display: grid; place-items: center; }
+.media-preview img { max-inline-size: 100%; block-size: auto; border-radius: var(--radius-sm); }
+
+/* ---- Messages ---- */
+.message-body { white-space: pre-wrap; overflow-wrap: anywhere; line-height: var(--leading-relaxed, 1.9); }
+.table tr.is-unread .table__primary a { font-weight: var(--weight-bold); }

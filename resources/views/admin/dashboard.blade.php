@@ -27,7 +27,7 @@
     @else
       <ul class="activity-list" role="list">
         @foreach ($activity as $item)
-          <li><span>{{ __('activity.'.$item->event) }}</span><time class="tabular text-muted" datetime="{{ $item->created_at->toIso8601String() }}">{{ Jalali::format($item->created_at, 'Y/m/d H:i') }}</time></li>
+          <li><span>{{ __('activity.'.$item->event) }}@isset($item->properties['title'])<span class="text-muted"> — {{ $item->properties['title'] }}</span>@endisset</span><time class="tabular text-muted" datetime="{{ $item->created_at->toIso8601String() }}">{{ Jalali::format($item->created_at, 'Y/m/d H:i') }}</time></li>
         @endforeach
       </ul>
     @endif

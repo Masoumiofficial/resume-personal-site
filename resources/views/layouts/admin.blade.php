@@ -12,14 +12,43 @@
   <aside class="admin-sidebar" id="admin-sidebar" aria-label="منوی مدیریت">
     <a class="brand" href="{{ route('admin.dashboard') }}"><span class="monogram" aria-hidden="true">س‌م</span><span>پنل مدیریت</span></a>
     <nav class="admin-nav">
-      {{-- Only sections that exist are listed; content modules are added in Phase 3. --}}
-      <div class="admin-nav__group">
-        <a href="{{ route('admin.dashboard') }}" @if (request()->routeIs('admin.dashboard')) aria-current="page" @endif><svg aria-hidden="true"><use href="#i-home"/></svg>پیشخوان</a>
-      </div>
-      <div class="admin-nav__group mt-5">
-        <span class="admin-nav__label">سیستم</span>
-        <a href="{{ route('admin.security') }}" @if (request()->routeIs('admin.security')) aria-current="page" @endif><svg aria-hidden="true"><use href="#i-shield"/></svg>امنیت حساب</a>
-      </div>
+      @php
+        $navGroups = [
+          null => [['admin.dashboard', 'admin.dashboard', 'i-home', 'پیشخوان']],
+          'محتوا' => [
+            ['admin.articles.index', 'admin.articles.*|admin.article-categories.*|admin.tags.*', 'i-file', 'مقالات'],
+            ['admin.projects.index', 'admin.projects.*|admin.project-categories.*', 'i-briefcase', 'نمونه‌کارها'],
+            ['admin.services.index', 'admin.services.*|admin.service-groups.*', 'i-layers', 'خدمات و تعرفه'],
+            ['admin.testimonials.index', 'admin.testimonials.*', 'i-quote', 'نظرات مشتریان'],
+          ],
+          'رزومه' => [
+            ['admin.profile.edit', 'admin.profile.*', 'i-user', 'پروفایل'],
+            ['admin.experiences.index', 'admin.experiences.*', 'i-briefcase', 'سوابق کاری'],
+            ['admin.educations.index', 'admin.educations.*', 'i-cap', 'تحصیلات'],
+            ['admin.skills.index', 'admin.skills.*', 'i-code', 'مهارت‌ها و زبان‌ها'],
+            ['admin.certifications.index', 'admin.certifications.*', 'i-award', 'دوره‌ها و گواهی‌ها'],
+            ['admin.resume.print', 'admin.resume.print', 'i-printer', 'نسخهٔ چاپی رزومه'],
+          ],
+          'رسانه و پیام' => [
+            ['admin.media.index', 'admin.media.*', 'i-image', 'رسانه'],
+            ['admin.messages.index', 'admin.messages.*', 'i-mail', 'پیام‌ها'],
+          ],
+          'سیستم' => [
+            ['admin.settings.edit', 'admin.settings.*', 'i-settings', 'تنظیمات'],
+            ['admin.activity', 'admin.activity', 'i-list', 'گزارش فعالیت'],
+            ['admin.security', 'admin.security', 'i-shield', 'امنیت حساب'],
+          ],
+        ];
+        $newMessages = \Illuminate\Support\Facades\DB::table('contact_messages')->where('status', 'new')->count();
+      @endphp
+      @foreach ($navGroups as $group => $links)
+        <div class="admin-nav__group @unless ($loop->first) mt-5 @endunless">
+          @if ($group)<span class="admin-nav__label">{{ $group }}</span>@endif
+          @foreach ($links as [$routeName, $pattern, $icon, $label])
+            <a href="{{ route($routeName) }}" @if (request()->routeIs(...explode('|', $pattern))) aria-current="page" @endif><svg aria-hidden="true"><use href="#{{ $icon }}"/></svg>{{ $label }}@if ($routeName === 'admin.messages.index' && $newMessages > 0)<span class="badge badge--accent admin-nav__count">{{ \App\Support\Jalali::number($newMessages) }}<span class="visually-hidden"> پیام جدید</span></span>@endif</a>
+          @endforeach
+        </div>
+      @endforeach
     </nav>
   </aside>
 
@@ -38,6 +67,12 @@
     </header>
 
     <main class="admin-content" id="admin-main">
+      @if (session('flash'))
+        <div class="alert alert--success" role="status"><span>{{ session('flash') }}</span></div>
+      @endif
+      @if (session('flash_error'))
+        <div class="alert alert--danger" role="alert"><span>{{ session('flash_error') }}</span></div>
+      @endif
       @yield('content')
     </main>
   </div>
