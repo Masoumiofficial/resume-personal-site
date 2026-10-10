@@ -1,0 +1,6 @@
+{
+    "The provided password was incorrect.": "رمز عبور درست نیست.",
+    "The provided two factor authentication code was invalid.": "کد ورود دومرحله‌ای درست نیست.",
+    "The provided two factor recovery code was invalid.": "کد بازیابی درست نیست.",
+    "The :attribute must be at least :length characters.": ":attribute باید دست‌کم :length نویسه باشد."
+}
