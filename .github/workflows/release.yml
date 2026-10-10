@@ -110,7 +110,9 @@ jobs:
           sed -i -e "s#^DB_DATABASE=.*#DB_DATABASE=/tmp/split/project/database/site.sqlite#" -e "s#^APP_URL=.*#APP_URL=http://127.0.0.1:8081#" project/.env
           echo "<?php return '/tmp/split/project';" > www/app-path.php
           echo "<?php return '/tmp/split/www';" > project/bootstrap/public-path.php
-          (cd project && php artisan optimize && php artisan app:check-production | grep -E "Web root|not inside|public/media" | tee /tmp/split-check.txt)
+          (cd project && php artisan optimize && { php artisan app:check-production > /tmp/split-full.txt || true; })
+          grep -E "Web root|not inside|public/media" /tmp/split-full.txt | tee /tmp/split-check.txt
+          test "$(wc -l < /tmp/split-check.txt)" -ge 4
           if grep -q "FAIL" /tmp/split-check.txt; then exit 1; fi
           cd www && php -S 127.0.0.1:8081 ../project/vendor/laravel/framework/src/Illuminate/Foundation/resources/server.php > /tmp/server2.log 2>&1 &
           for i in $(seq 1 20); do curl -fsS -o /dev/null http://127.0.0.1:8081/up && break; sleep 0.5; done
