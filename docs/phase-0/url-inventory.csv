@@ -5,15 +5,15 @@ old_url,type,discovered_via,last_modified,proposed_action,proposed_target,notes
 /works/,page,page-sitemap + REST,2026-02-04,keep,/works/,Portfolio index (currently empty on old site)
 /blog/,page (posts index),post-sitemap + REST,2024-10-17,keep,/blog/,Paginated: /blog/page/N/ -> decide in Phase 1
 /contact/,page,page-sitemap + REST,2026-02-04,keep,/contact/,
-/shop/,page (WooCommerce),page-sitemap + product-sitemap,2024-10-16,DECISION Q3,TBD,If no shop: 301 to service page or 410
+/shop/,page (WooCommerce),page-sitemap + product-sitemap,2024-10-16,301,/services/,D4: no shop in v1; services index
 /cart/,page (WooCommerce),page-sitemap,2024-10-17,410,,No commerce in v1
 /checkout/,page (WooCommerce),page-sitemap,2024-10-16,410,,No commerce in v1
 /checkout-3/,page (WooCommerce),page-sitemap,2024-10-17,410,,Duplicate checkout page
 /my-account/,page (WooCommerce),page-sitemap,2024-10-16,410,,No public accounts in v1
-/product/samandehi-license/,product,product-sitemap,2026-08-01,DECISION Q3,TBD,Options: service page / 301 etehadwp.com/product/samandehi/ / 410
-/product-category/%d8%ae%d8%af%d9%85%d8%a7%d8%aa-%d8%ab%d8%a8%d8%aa%db%8c-%d9%88-%d9%85%d8%ac%d9%88%d8%b2%d9%87%d8%a7%db%8c-%da%a9%d8%b3%d8%a8-%d9%88-%da%a9%d8%a7%d8%b1-%d9%85%d8%ac%d8%a7%d8%b2%db%8c/,product category,product_cat-sitemap,2026-08-01,DECISION Q3,TBD,Follows product decision
-/what-is-wordpress/,post,REST,2026-08-20,keep (proposed),/what-is-wordpress/,Root-level slug kept to avoid redirects; reserved-slug validation required. Duplicate of etehadwp.com (likely); NOT in sitemap; DECISION Q4
-/what-is-domain/,post,REST,2026-08-20,keep (proposed),/what-is-domain/,Root-level slug kept to avoid redirects; reserved-slug validation required. Verified duplicate of etehadwp.com/what-is-domain/; NOT in sitemap; DECISION Q4
+/product/samandehi-license/,product,product-sitemap,2026-08-01,301,/services/samandehi-license/,"D4: simple service page (request/contact CTA, no payment)"
+/product-category/%d8%ae%d8%af%d9%85%d8%a7%d8%aa-%d8%ab%d8%a8%d8%aa%db%8c-%d9%88-%d9%85%d8%ac%d9%88%d8%b2%d9%87%d8%a7%db%8c-%da%a9%d8%b3%d8%a8-%d9%88-%da%a9%d8%a7%d8%b1-%d9%85%d8%ac%d8%a7%d8%b2%db%8c/,product category,product_cat-sitemap,2026-08-01,301,/services/,D4
+/what-is-wordpress/,post,REST,2026-08-20,keep + rewrite,/what-is-wordpress/,"D5: URL kept, content rewritten (unique), approve before publish; NOT in old sitemap"
+/what-is-domain/,post,REST,2026-08-20,keep + rewrite,/what-is-domain/,"D5: URL kept, content rewritten (unique), approve before publish; NOT in old sitemap"
 /software-testing-and-optimization-methods/,post,REST + post-sitemap,2024-11-26,keep (proposed),/software-testing-and-optimization-methods/,Root-level slug kept to avoid redirects; reserved-slug validation required. 
 /programming-guide-for-beginners/,post,REST + post-sitemap,2024-11-07,keep (proposed),/programming-guide-for-beginners/,Root-level slug kept to avoid redirects; reserved-slug validation required. 
 /learn-programming-for-beginners/,post,REST + post-sitemap,2024-11-03,keep (proposed),/learn-programming-for-beginners/,Root-level slug kept to avoid redirects; reserved-slug validation required. 
