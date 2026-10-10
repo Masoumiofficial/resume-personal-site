@@ -25,6 +25,8 @@ class SecurityHeaders
         $response = $next($request);
 
         $headers = $response->headers;
+        // PHP adds X-Powered-By itself when expose_php is on; it is not in the Symfony bag.
+        header_remove('X-Powered-By');
         $headers->set('X-Content-Type-Options', 'nosniff');
         $headers->set('X-Frame-Options', 'DENY');
         $headers->set('Referrer-Policy', 'strict-origin-when-cross-origin');

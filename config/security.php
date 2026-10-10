@@ -22,4 +22,13 @@ return [
         'report_only' => (bool) env('SECURITY_CSP_REPORT_ONLY', false),
     ],
 
+    /*
+    | Reverse proxies / CDN in front of the site (e.g. a CDN that terminates
+    | TLS). Only then are X-Forwarded-For/-Proto trusted, so rate limits and
+    | logs see the visitor's IP instead of the proxy's. Empty = trust no one
+    | (correct when the web server itself terminates TLS). Comma-separated
+    | IPs/CIDRs, or "*" only if the origin is reachable through the proxy alone.
+    */
+    'trusted_proxies' => env('TRUSTED_PROXIES'),
+
 ];

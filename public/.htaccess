@@ -43,6 +43,9 @@
 </IfModule>
 
 <IfModule mod_headers.c>
+    # Do not advertise the PHP version (expose_php may be on at the host).
+    Header always unset X-Powered-By
+    Header unset X-Powered-By
     <FilesMatch "\.(css|js|woff2)$">
         Header set X-Content-Type-Options "nosniff"
     </FilesMatch>
