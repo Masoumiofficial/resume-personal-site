@@ -21,7 +21,7 @@
       <div class="empty card"><p>هنوز مقاله‌ای در این بخش منتشر نشده است.</p></div>
     @else
       <div class="grid grid--3">
-        @foreach ($articles as $article)@include('site.partials.post-card', ['withExcerpt' => true])@endforeach
+        @foreach ($articles as $article)@include('site.partials.post-card', ['withExcerpt' => true, 'headingLevel' => 2])@endforeach
       </div>
     @endif
 

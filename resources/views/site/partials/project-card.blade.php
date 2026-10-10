@@ -10,6 +10,7 @@
   @if ($project->categories->isNotEmpty())
     <div class="post-card__meta">@foreach ($project->categories as $c)<span class="badge">{{ $c->name }}</span>@endforeach</div>
   @endif
-  <h3><a class="card__link" href="{{ $project->url() }}">{{ $project->title }}</a></h3>
+  @php $h = 'h'.($headingLevel ?? 3); @endphp
+  <{{ $h }} class="card__title"><a class="card__link" href="{{ $project->url() }}">{{ $project->title }}</a></{{ $h }}>
   @if ($project->summary)<p class="muted text-sm">{{ $project->summary }}</p>@endif
 </article>

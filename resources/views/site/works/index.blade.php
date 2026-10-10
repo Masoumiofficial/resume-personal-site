@@ -12,7 +12,7 @@
       </div>
     @else
       <div class="grid grid--3">
-        @foreach ($projects as $project)@include('site.partials.project-card')@endforeach
+        @foreach ($projects as $project)@include('site.partials.project-card', ['headingLevel' => 2])@endforeach
       </div>
     @endif
   </div>

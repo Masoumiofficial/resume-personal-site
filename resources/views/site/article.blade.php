@@ -3,8 +3,8 @@
 @use('App\Support\Jalali')
 @php
   $category = $article->categories->first();
-  // Body images: lazy + async decode (the Markdown renderer emits a bare <img>).
-  $body = str_replace('<img ', '<img loading="lazy" decoding="async" ', (string) $article->body_html);
+  // Body images: lazy, async decode, real size of local files (no layout shift).
+  $body = \App\Support\BodyImages::prepare((string) $article->body_html);
 @endphp
 
 @section('content')

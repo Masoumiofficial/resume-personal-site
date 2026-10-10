@@ -1,0 +1,10 @@
+{
+  "name": "lab-perf",
+  "private": true,
+  "type": "module",
+  "description": "Development-only lab measurements (Lighthouse). Never deployed; production needs no Node.",
+  "dependencies": {
+    "lighthouse": "13.5.0",
+    "puppeteer-core": "25.13.0"
+  }
+}

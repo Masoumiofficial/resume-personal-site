@@ -12,6 +12,7 @@
     <time datetime="{{ $article->published_at->toDateString() }}">{{ \App\Support\JalaliDate::display($article->published_at) }}</time>
     @if ($article->reading_minutes)<span aria-hidden="true">·</span><span>{{ \App\Support\Jalali::digits($article->reading_minutes) }} دقیقه مطالعه</span>@endif
   </div>
-  <h3><a class="card__link" href="{{ $article->url() }}">{{ $article->title }}</a></h3>
+  @php $h = 'h'.($headingLevel ?? 3); @endphp
+  <{{ $h }} class="card__title"><a class="card__link" href="{{ $article->url() }}">{{ $article->title }}</a></{{ $h }}>
   @if ($article->excerpt && ($withExcerpt ?? false))<p class="muted text-sm">{{ $article->excerpt }}</p>@endif
 </article>
