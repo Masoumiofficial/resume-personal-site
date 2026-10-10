@@ -38,6 +38,17 @@ return [
             'report' => false,
         ],
 
+        // Uploaded media lives under public/ (no symlink needed on shared hosting).
+        // public/media/.htaccess blocks script execution and directory listing.
+        'media' => [
+            'driver' => 'local',
+            'root' => public_path('media'),
+            'url' => rtrim(env('APP_URL', 'http://localhost'), '/').'/media',
+            'visibility' => 'public',
+            'throw' => true,
+            'report' => false,
+        ],
+
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),
