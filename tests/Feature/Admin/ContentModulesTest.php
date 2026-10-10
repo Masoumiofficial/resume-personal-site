@@ -68,12 +68,18 @@ class ContentModulesTest extends TestCase
         $group = $this->group();
         $this->actingAs($this->admin())->post('/admin/services', [
             'title' => 'x', 'service_group_id' => $group->id, 'price_unit' => 'once', 'cta_type' => 'contact',
-            'status' => 'published', 'published_at' => '1499/01/01 10:00',
-        ])->assertSessionHasNoErrors();
+            'status' => 'published', 'published_at' => '1410/01/01 10:00',
+        ])->assertRedirect()->assertSessionHasNoErrors();
 
         $service = Service::query()->sole();
         $this->assertSame('scheduled', $service->publicationState());
         $this->assertSame(0, Service::query()->published()->count());
+
+        // Beyond the TIMESTAMP range of MySQL/MariaDB: a validation error, never a database error.
+        $this->put("/admin/services/{$service->id}", [
+            'title' => 'x', 'service_group_id' => $group->id, 'price_unit' => 'once', 'cta_type' => 'contact',
+            'status' => 'published', 'published_at' => '1499/01/01',
+        ])->assertRedirect()->assertSessionHasErrors(['published_at' => 'زمان انتشار: تاریخ باید پیش از سال ۱۴۱۷ (۲۰۳۸ میلادی) باشد.']);
     }
 
     public function test_article_slug_rules_body_sanitising_and_relations(): void

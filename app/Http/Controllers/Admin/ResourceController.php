@@ -342,7 +342,15 @@ abstract class ResourceController extends Controller
 
                         return $parsed ? $parsed[0]->toDateString() : null;
                     })(),
-                    'jdatetime' => JalaliDate::parseDateTime(is_string($text) ? $text : null)?->toDateTimeString(),
+                    'jdatetime' => (function () use ($text, $field) {
+                        $at = JalaliDate::parseDateTime(is_string($text) ? $text : null);
+                        // TIMESTAMP columns on MySQL/MariaDB end at 2038-01-19 (= 1416/10/29).
+                        if ($at && $at->year >= 2038) {
+                            throw new InvalidArgumentException("{$field['label']}: تاریخ باید پیش از سال ۱۴۱۷ (۲۰۳۸ میلادی) باشد.");
+                        }
+
+                        return $at?->toDateTimeString();
+                    })(),
                     'lines' => $this->toLines($text),
                     'links' => $this->toLinks($text),
                     'checklist' => array_values(array_filter((array) $raw, 'is_scalar')),
@@ -352,7 +360,7 @@ abstract class ResourceController extends Controller
                 $input[$name] = null;
                 $errors[$name] = match ($field['type']) {
                     'jdate' => "{$field['label']}: تاریخ شمسی را به شکل ۱۴۰۲ یا ۱۴۰۲/۰۱ یا ۱۴۰۲/۰۱/۱۵ وارد کنید.",
-                    'jdatetime' => "{$field['label']}: به شکل ۱۴۰۵/۰۷/۱۸ ۱۴:۳۰ وارد کنید (ساعت اختیاری است).",
+                    'jdatetime' => str_contains($e->getMessage(), '۲۰۳۸') ? $e->getMessage() : "{$field['label']}: به شکل ۱۴۰۵/۰۷/۱۸ ۱۴:۳۰ وارد کنید (ساعت اختیاری است).",
                     default => "{$field['label']} معتبر نیست.",
                 };
             }
