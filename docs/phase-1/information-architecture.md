@@ -126,7 +126,7 @@ H1 · خلاصه · نقش من · فناوری‌ها · **مسئله → را�
 
 | جدول | فیلدهای کلیدی | دلیل |
 |---|---|---|
-| `profile` (یک ردیف) | display_name، headline، short_bio، long_bio (Markdown)، avatar_id، location، show_location، email، phone، show_phone، `social_links` (JSON: نوع + URL)، availability_note، resume_summary | هویت یک نفره. JSON برای شبکه‌ها کافی است چون کوئری روی آن‌ها لازم نیست. |
+| `profiles` (یک ردیف) | display_name، headline، short_bio، long_bio (Markdown)، avatar_id، location، show_location، email، phone، show_phone، `social_links` (JSON: نوع + URL)، availability_note، resume_summary | هویت یک نفره. JSON برای شبکه‌ها کافی است چون کوئری روی آن‌ها لازم نیست. |
 | `settings` | key (unique)، value (JSON) | عنوان سایت، لوگو، favicon، رنگ تأکیدی، فوتر، متای پیش‌فرض، بخش‌های فعال خانه |
 
 ### ۴.۳ رزومه
@@ -192,14 +192,14 @@ H1 · خلاصه · نقش من · فناوری‌ها · **مسئله → را�
 | جدول | فیلدهای کلیدی | دلیل |
 |---|---|---|
 | `contact_messages` | name، email، subject، message، status (new\|read\|replied\|archived\|spam)، `ip_hash` (HMAC با کلید برنامه، **نه IP خام**)، user_agent (کوتاه‌شده)، handled_at | پیشنهاد نگهداری: ۱۲ ماه، سپس حذف با Cron یا دستی |
-| `redirects` | from_path (unique، نرمال‌شده)، to_url (نال‌پذیر برای 410)، status_code (301\|302\|410)، hits، last_hit_at، note، is_active | مهاجرت وردپرس + مدیریت بعدی URLها |
-| `activity_logs` | user_id (نال‌پذیر)، event (login.success\|login.failed\|article.updated\|…)، subject_type، subject_id، ip_hash، `properties` (JSON، **بدون رمز یا توکن**)، created_at | ممیزی امنیتی و «فعالیت‌های اخیر» داشبورد |
+| `redirects` | from_path (TEXT، نرمال‌شده) + from_hash (SHA-256، unique؛ چون URLهای فارسی کدشده از حد طول ایندکس بیشترند)، to_url (نال‌پذیر برای 410)، status_code (301\|302\|410)، hits، last_hit_at، note، is_active | مهاجرت وردپرس + مدیریت بعدی URLها |
+| `activity_logs` | user_id (نال‌پذیر)، event (`auth.login`\|`auth.failed`\|`auth.two_factor_enabled`\|… و در فاز ۳ `article.updated`\|…)، subject_type، subject_id، ip_hash، `properties` (JSON، **بدون رمز یا توکن**)، created_at | ممیزی امنیتی و «فعالیت‌های اخیر» داشبورد |
 
 ---
 
 ## ۵. معیارهای پذیرش فاز ۱
 
-- [ ] کاربر نقشهٔ سایت و پنل را تأیید کرده است.
-- [ ] کاربر نمونهٔ بصری (`design/prototype/`) و جهت طراحی را تأیید یا اصلاح کرده است.
-- [ ] مدل محتوایی تأیید شده است. هر جدول دلیل نیاز دارد. جداول افزوده نسبت به Spec: `services`، `service_groups`، `testimonials`، `redirects`، `project_media`.
-- [ ] عنوان حرفه‌ای نهایی مشخص شده است.
+- [x] کاربر نقشهٔ سایت و پنل را تأیید کرده است (۱۸ مهر ۱۴۰۵، «ادامه بده»).
+- [x] کاربر نمونهٔ بصری (`design/prototype/`) و جهت طراحی را تأیید کرده است.
+- [x] مدل محتوایی تأیید شده است. هر جدول دلیل نیاز دارد. جداول افزوده نسبت به Spec: `services`، `service_groups`، `testimonials`، `redirects`، `project_media`.
+- [ ] عنوان حرفه‌ای نهایی مشخص شده است. (**هنوز باز**؛ مانع فاز ۲ و ۳ نیست، پیش از انتشار فاز ۴ لازم است.)
