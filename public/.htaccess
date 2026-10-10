@@ -50,3 +50,9 @@
         Header set X-Content-Type-Options "nosniff"
     </FilesMatch>
 </IfModule>
+
+# Text compression where the server does it via Apache modules (LiteSpeed usually
+# compresses at server level and ignores this). Verify with tools/smoke (D38).
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/css text/plain text/xml application/javascript text/javascript application/xml application/rss+xml application/json image/svg+xml
+</IfModule>

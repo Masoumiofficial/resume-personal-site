@@ -53,14 +53,17 @@ class SecurityHeaders
             $headers->set('Strict-Transport-Security', 'max-age='.(int) config('security.hsts.max_age'));
         }
 
-        // Staging/local copies must never end up in search results (covers feeds and files too, not just HTML).
-        if (! app()->isProduction()) {
+        $admin = $request->is(config('admin.path'), config('admin.path').'/*');
+
+        // Staging/local copies must never end up in search results (covers feeds and files too, not just HTML);
+        // the admin panel (login, 2FA, password reset, exports) never, in any environment.
+        if (! app()->isProduction() || $admin) {
             $headers->set('X-Robots-Tag', 'noindex, nofollow');
         }
 
         // Authenticated/admin pages must never be stored by shared caches.
         // hasUser(): only an already-resolved user — never triggers a session lookup here.
-        if (auth()->guard()->hasUser() || $request->is(config('admin.path'), config('admin.path').'/*')) {
+        if (auth()->guard()->hasUser() || $admin) {
             $headers->set('Cache-Control', 'no-store, private');
         }
 

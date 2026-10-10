@@ -67,6 +67,15 @@ class SecurityHeadersTest extends TestCase
         $this->assertStringContainsString('no-store', (string) $this->get('/admin/login')->headers->get('Cache-Control'));
     }
 
+    public function test_admin_is_noindex_in_production_too(): void
+    {
+        // Found by the release smoke test (D38): production dropped the header on /admin/login.
+        $this->app->detectEnvironment(fn () => 'production');
+
+        $this->get('/admin/login')->assertOk()->assertHeader('X-Robots-Tag', 'noindex, nofollow');
+        $this->get('/about/')->assertHeaderMissing('X-Robots-Tag');
+    }
+
     public function test_headers_are_present_on_404_pages(): void
     {
         $this->get('/this-page-does-not-exist/')->assertNotFound()->assertHeader('X-Content-Type-Options', 'nosniff');
