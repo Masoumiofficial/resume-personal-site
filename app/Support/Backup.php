@@ -18,7 +18,9 @@ use Throwable;
  *
  * Files live in storage/app/backups (outside public/), mode 0600:
  *   db-YYYYmmdd-HHMMSS.jsonl.gz     header line + one {"t": table, "r": row} per line
- *   media-YYYYmmdd-HHMMSS.tar.gz    public/media (optional)
+ *   media-YYYYmmdd-HHMMSS.tar       public/media (optional; images are already
+ *                                   compressed, and PharData::compress() produced
+ *                                   empty entries on PHP 8.3 in testing)
  *
  * Note: encrypted columns (2FA secrets) and sessions depend on APP_KEY; keep
  * a copy of the production .env in a safe place separately from backups.
@@ -117,12 +119,10 @@ final class Backup
         foreach ($files as $file) {
             $archive->addFile($file->getPathname(), $file->getRelativePathname());
         }
-        $archive->compress(\Phar::GZ);
         unset($archive);
-        @unlink($tar);
-        @chmod($tar.'.gz', 0600);
+        @chmod($tar, 0600);
 
-        return ['path' => $tar.'.gz', 'files' => $files->count(), 'bytes' => (int) filesize($tar.'.gz')];
+        return ['path' => $tar, 'files' => $files->count(), 'bytes' => (int) filesize($tar)];
     }
 
     /** Header of a database backup, validated. */
@@ -225,7 +225,7 @@ final class Backup
     public static function prune(int $keepDb, int $keepMedia): array
     {
         $deleted = [];
-        foreach (['db-*.jsonl.gz' => $keepDb, 'media-*.tar.gz' => $keepMedia] as $pattern => $keep) {
+        foreach (['db-*.jsonl.gz' => $keepDb, 'media-*.tar' => $keepMedia] as $pattern => $keep) {
             $files = File::glob(self::directory().'/'.$pattern);
             rsort($files);   // names sort by timestamp
             foreach (array_slice($files, max($keep, 1)) as $old) {

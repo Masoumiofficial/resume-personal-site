@@ -16,7 +16,7 @@ class RestoreSite extends Command
 {
     protected $signature = 'app:restore
         {file : db-*.jsonl.gz file (name inside storage/app/backups, or a path)}
-        {--media= : media-*.tar.gz to extract over public/media}
+        {--media= : media-*.tar to extract over public/media}
         {--force : Do not ask for confirmation (required in production / cron)}';
 
     protected $description = 'Restore the database (and optionally media) from an app:backup file — replaces ALL current data';

@@ -96,7 +96,7 @@ class BackupRestoreTest extends TestCase
         File::put($this->media.'/.htaccess', 'deny');
 
         $this->artisan('app:backup', ['--media' => true])->expectsOutputToContain('1 files')->assertSuccessful();
-        $archive = File::glob($this->dir.'/media-*.tar.gz')[0];
+        $archive = File::glob($this->dir.'/media-*.tar')[0];
         $db = File::glob($this->dir.'/db-*.jsonl.gz')[0];
 
         File::delete($this->media.'/2026/10/photo.webp');
