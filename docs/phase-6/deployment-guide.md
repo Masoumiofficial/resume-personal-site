@@ -134,7 +134,7 @@ mv ~/domains/sajadmasoumi.com/public_html ~/domains/sajadmasoumi.com/wordpress-o
 ## ۵. آپلود و استخراج
 
 1. File Manager › پوشهٔ `domains/sajadmasoumi.com/`.
-2. فایل zip را آپلود کنید. حدود ۸ مگابایت است. سقف آپلود هاست ۶۴ مگابایت است.
+2. فایل zip را آپلود کنید. حجم `v1.0.0-rc.1` حدود ۹٫۴ مگابایت است. سقف آپلود هاست ۶۴ مگابایت است.
 3. Extract کنید. پوشهٔ `site/` ساخته می‌شود. برای سایت آزمایشی آن را به `site-staging` تغییر نام دهید.
 4. مجوزها: پوشه‌های `storage/` و `bootstrap/cache/` و `public/media/` باید برای کاربر شما قابل نوشتن باشند. پیش‌فرض DirectAdmin معمولاً کافی است. مجوز **777 ندهید**.
 
