@@ -9,4 +9,7 @@ use Illuminate\Support\Facades\Route;
 |   prefix  = config('admin.path')   middleware = web, auth   name = admin.*
 */
 Route::get('/', DashboardController::class)->name('dashboard');
-Route::get('/security', SecurityController::class)->name('security');
+// "Sudo mode": the page asks for the password again (valid 3h, auth.password_timeout),
+// so the 2FA buttons on it work directly instead of bouncing through a
+// confirmation that would GET a POST-only endpoint.
+Route::get('/security', SecurityController::class)->middleware('password.confirm')->name('security');

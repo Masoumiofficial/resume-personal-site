@@ -49,7 +49,7 @@ class SecurityHeadersTest extends TestCase
             $this->get('/admin/forgot-password')->getContent(),
             $this->get('/')->getContent(),
             $this->actingAs($user)->get('/admin')->getContent(),
-            $this->actingAs($user)->get('/admin/security')->getContent(),
+            $this->actingAs($user)->withSession(['auth.password_confirmed_at' => time()])->get('/admin/security')->assertOk()->getContent(),
         ];
 
         foreach ($pages as $html) {

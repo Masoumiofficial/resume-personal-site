@@ -50,11 +50,14 @@ class DashboardTest extends TestCase
         $this->actingAs($user)->get('/admin')->assertSee('ورود موفق');
     }
 
-    public function test_security_page_renders(): void
+    public function test_security_page_requires_recent_password_confirmation(): void
     {
         $user = User::factory()->create();
 
-        $this->actingAs($user)->get('/admin/security')->assertOk()
+        $this->actingAs($user)->get('/admin/security')->assertRedirect('/admin/user/confirm-password');
+
+        $this->actingAs($user)->withSession(['auth.password_confirmed_at' => time()])
+            ->get('/admin/security')->assertOk()
             ->assertSee('ورود دومرحله‌ای (TOTP)')
             ->assertSee('تغییر رمز عبور');
     }

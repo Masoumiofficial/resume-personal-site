@@ -86,7 +86,29 @@ class TwoFactorTest extends TestCase
 
         $this->assertNotNull($user->fresh()->two_factor_secret);
         $this->assertNull($user->fresh()->two_factor_confirmed_at);
+        $this->assertDatabaseMissing('activity_logs', ['event' => 'auth.two_factor_enabled']); // only after confirming a code
 
-        $this->actingAs($user->fresh())->get('/admin/security')->assertOk()->assertSee('<svg', false)->assertSee('تأیید و فعال‌سازی');
+        $this->actingAs($user->fresh())->withSession(['auth.password_confirmed_at' => time()])->get('/admin/security')->assertOk()->assertSee('<svg', false)->assertSee('تأیید و فعال‌سازی');
+    }
+
+    public function test_confirming_a_valid_code_enables_two_factor_and_shows_recovery_codes(): void
+    {
+        $google2fa = new Google2FA;
+        $user = User::factory()->create();
+        $session = ['auth.password_confirmed_at' => time()];
+
+        $this->actingAs($user)->withSession($session)->post('/admin/user/two-factor-authentication');
+        $secret = decrypt($user->fresh()->two_factor_secret);
+
+        $this->actingAs($user)->withSession($session)->from('/admin/security')
+            ->post('/admin/user/confirmed-two-factor-authentication', ['code' => $google2fa->getCurrentOtp($secret)])
+            ->assertRedirect('/admin/security');
+
+        $this->assertNotNull($user->fresh()->two_factor_confirmed_at);
+        $this->assertDatabaseHas('activity_logs', ['event' => 'auth.two_factor_enabled', 'user_id' => $user->id]);
+
+        $codes = $user->fresh()->recoveryCodes();
+        $this->actingAs($user->fresh())->withSession($session + ['status' => 'two-factor-authentication-confirmed'])
+            ->get('/admin/security')->assertOk()->assertSee($codes[0])->assertSee('فعال');
     }
 }

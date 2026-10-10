@@ -31,6 +31,7 @@
     @elseif ($twoFactorPending)
       <p class="text-sm">این کد QR را با برنامهٔ احراز هویت (مثل Google Authenticator یا Aegis) اسکن کنید، سپس کد ۶ رقمی را وارد کنید.</p>
       <div class="qr mt-5">{!! $qrSvg !!}</div>
+      <p class="text-sm mt-5">اگر اسکن ممکن نیست، این کلید را دستی وارد کنید: <code class="ltr" data-setup-key>{{ trim(chunk_split($setupKey, 4, ' ')) }}</code></p>
       <form class="stack stack--5 mt-5" method="POST" action="{{ route('two-factor.confirm') }}" novalidate>
         @csrf
         <div class="field">

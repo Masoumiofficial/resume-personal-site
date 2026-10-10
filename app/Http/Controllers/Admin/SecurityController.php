@@ -23,6 +23,8 @@ class SecurityController extends Controller
             'twoFactorEnabled' => $user->hasEnabledTwoFactorAuthentication(),
             'twoFactorPending' => $pending,
             'qrSvg' => $pending ? $user->twoFactorQrCodeSvg() : null,
+            // Shown only during setup, on a password-confirmed page, for apps that cannot scan.
+            'setupKey' => $pending ? decrypt($user->two_factor_secret) : null,
             'recoveryCodes' => session('status') === 'recovery-codes-generated' || session('status') === 'two-factor-authentication-confirmed'
                 ? $user->recoveryCodes()
                 : null,
