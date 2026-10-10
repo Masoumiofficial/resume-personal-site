@@ -98,6 +98,10 @@ class ImportSiteContentTest extends TestCase
         $this->assertStringContainsString('<h2>', $article->body_html);
         $this->assertNotNull($article->reading_minutes);
 
+        // The two posts copied from etehadwp.com were rewritten (D5) and wait for the owner's review.
+        $this->assertSame(3, Article::query()->published()->count());
+        $this->assertSame(['draft', 'draft'], Article::query()->whereIn('slug', ['what-is-wordpress', 'what-is-domain'])->pluck('status')->all());
+
         // No post links to the old .ir domain any more; images use site-relative /wp-content paths.
         foreach (Article::query()->get() as $a) {
             $this->assertStringNotContainsString('sajadmasoumi.ir', $a->body, $a->slug);
