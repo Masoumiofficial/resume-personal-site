@@ -64,6 +64,7 @@ jobs:
 
       - name: Verify — boot the package like the host (production env)
         run: |
+          set -o pipefail
           mkdir -p /tmp/verify && unzip -q "dist/$ZIP" -d /tmp/verify
           cd /tmp/verify/site
           cp .env.production.example .env
@@ -73,11 +74,13 @@ jobs:
             -e 's#^DB_CONNECTION=.*#DB_CONNECTION=sqlite#' \
             -e "s#^DB_DATABASE=.*#DB_DATABASE=$PWD/database/site.sqlite#" .env
           touch database/site.sqlite
-          php artisan key:generate --force
-          php artisan migrate --force
-          php artisan app:import-site-content
-          php artisan app:create-admin --name=CI --email=ci@example.com --generate-password --no-interaction
-          test -f storage/app/private/initial-admin-password.txt && rm storage/app/private/initial-admin-password.txt
+          # Exactly what the host runs (one-off cron): first run installs, second is a no-op.
+          php artisan app:deploy --admin-name=CI --admin-email=ci@example.com | tee /tmp/deploy1.txt
+          grep -q "Import the reviewed site content" /tmp/deploy1.txt
+          grep -q "APP_KEY" /tmp/deploy1.txt
+          php artisan app:deploy | tee /tmp/deploy2.txt
+          grep -q "already deployed" /tmp/deploy2.txt
+          rm storage/app/private/initial-admin-password.txt   # fails the step if it was not created
           php artisan app:backup --media
           php artisan app:restore "$(ls storage/app/backups/db-*.jsonl.gz | head -1)" --force
           php artisan optimize
@@ -95,6 +98,24 @@ jobs:
           if grep -hs "\.ERROR" storage/logs/*.log | head -5 | sed 's/^/::error title=Laravel log::/' | grep .; then exit 1; fi
           if [ "$status" != 0 ]; then grep -iE "fatal|error|warning" /tmp/server.log | head -5 | sed 's/^/::error title=php -S::/'; fi
           exit $status
+
+      - name: Verify — split layout (web root outside the project, app-path.php + public-path.php)
+        run: |
+          set -o pipefail
+          mkdir -p /tmp/split/www && cd /tmp/split
+          unzip -q "$GITHUB_WORKSPACE/dist/$ZIP" && mv site project
+          cp -a project/public/. www/ && rm -rf project/public
+          cp /tmp/verify/site/.env project/.env
+          cp /tmp/verify/site/database/site.sqlite project/database/site.sqlite
+          sed -i -e "s#^DB_DATABASE=.*#DB_DATABASE=/tmp/split/project/database/site.sqlite#" -e "s#^APP_URL=.*#APP_URL=http://127.0.0.1:8081#" project/.env
+          echo "<?php return '/tmp/split/project';" > www/app-path.php
+          echo "<?php return '/tmp/split/www';" > project/bootstrap/public-path.php
+          (cd project && php artisan optimize && php artisan app:check-production | grep -E "Web root|not inside|public/media" | tee /tmp/split-check.txt)
+          if grep -q "FAIL" /tmp/split-check.txt; then exit 1; fi
+          cd www && php -S 127.0.0.1:8081 ../project/vendor/laravel/framework/src/Illuminate/Foundation/resources/server.php > /tmp/server2.log 2>&1 &
+          for i in $(seq 1 20); do curl -fsS -o /dev/null http://127.0.0.1:8081/up && break; sleep 0.5; done
+          php "$GITHUB_WORKSPACE/tools/smoke/smoke.php" http://127.0.0.1:8081 --admin-path=panel-ci --dev-server --skip-redirects > /tmp/smoke2.txt || { cat /tmp/smoke2.txt; exit 1; }
+          tail -1 /tmp/smoke2.txt
 
       - uses: actions/upload-artifact@v7
         with:
