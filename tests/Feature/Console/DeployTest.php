@@ -6,6 +6,7 @@ use App\Console\Commands\CreateAdmin;
 use App\Console\Commands\Deploy;
 use App\Models\Profile;
 use App\Models\Service;
+use App\Models\Setting;
 use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Facades\Schema;
@@ -36,6 +37,7 @@ class DeployTest extends TestCase
         $this->assertSame('info@sajadmasoumi.com', Profile::current()->email);
         $this->assertSame('admin@example.com', User::query()->sole()->email);
         $this->assertFileExists(storage_path(CreateAdmin::PASSWORD_FILE));
+        $this->assertFalse((bool) Setting::get('search_indexing'));   // staging-safe until go-live (D41)
     }
 
     public function test_update_never_reimports_deleted_content_or_adds_accounts(): void
@@ -52,6 +54,11 @@ class DeployTest extends TestCase
 
         $this->assertSame($services, Service::query()->count());
         $this->assertSame(1, User::query()->count());
+
+        // An update keeps the owner's choice.
+        Setting::put(['search_indexing' => true]);
+        $this->artisan('app:deploy', ['--no-optimize' => true])->assertSuccessful();
+        $this->assertTrue((bool) Setting::get('search_indexing'));
     }
 
     public function test_an_already_deployed_revision_is_skipped(): void

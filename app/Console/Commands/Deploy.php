@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Setting;
 use App\Models\User;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
@@ -16,7 +17,8 @@ use Throwable;
  *   - APP_KEY generated only when empty (never rotated);
  *   - migrations with --force (only pending ones run);
  *   - content import only on a brand-new database (never re-creates content
- *     deleted later in the panel);
+ *     deleted later in the panel); a new database also starts with search
+ *     indexing OFF — going live is an explicit switch in Settings (D41);
  *   - admin account only when none exists (password to a private file);
  *   - caches rebuilt; then app:check-production.
  *
@@ -90,6 +92,8 @@ class Deploy extends Command
 
         if ($fresh) {
             $this->step('Import the reviewed site content (new database)', fn () => $this->call('app:import-site-content'));
+            Setting::put(['search_indexing' => false]);
+            $this->warn('Search indexing is OFF (new install). Turn it on in the panel → Settings at go-live.');
         } else {
             $this->line('Existing database: content import skipped.');
         }
