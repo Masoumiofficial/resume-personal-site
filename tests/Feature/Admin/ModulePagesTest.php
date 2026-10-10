@@ -2,6 +2,13 @@
 
 namespace Tests\Feature\Admin;
 
+use App\Models\Article;
+use App\Models\ContactMessage;
+use App\Models\Education;
+use App\Models\Project;
+use App\Models\ProjectCategory;
+use App\Models\Tag;
+use App\Models\Testimonial;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -34,6 +41,18 @@ class ModulePagesTest extends TestCase
     #[DataProvider('pages')]
     public function test_page_requires_login_and_renders_for_the_admin(string $uri): void
     {
+        // Lists must render with rows, not just empty states.
+        $this->artisan('app:import-site-content')->assertSuccessful();
+        Education::create(['institution' => 'دانشگاه نمونه']);
+        Project::create(['title' => 'پروژه', 'slug' => 'project']);
+        ProjectCategory::create(['name' => 'وردپرس', 'slug' => 'wordpress']);
+        $article = Article::create(['title' => 'مقاله', 'slug' => 'article']);
+        Article::create(['title' => 'حذف‌شده', 'slug' => 'trashed'])->delete();
+        Tag::create(['name' => 'برچسب', 'slug' => 'برچسب']);
+        Testimonial::create(['author_name' => 'نام', 'quote' => 'متن']);
+        ContactMessage::create(['name' => 'x', 'email' => 'x@example.com', 'message' => 'پیام آزمایشی']);
+        $this->assertNotNull($article->id);
+
         $this->get($uri)->assertRedirect('/admin/login');
 
         $html = $this->actingAs(User::factory()->create())->get($uri)

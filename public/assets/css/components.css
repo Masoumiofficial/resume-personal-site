@@ -150,7 +150,8 @@
 .table { inline-size: 100%; border-collapse: collapse; font-size: var(--text-sm); }
 .table th, .table td { padding: var(--space-3) var(--space-4); text-align: start; border-block-end: 1px solid var(--color-border); vertical-align: middle; }
 .table td.tabular { white-space: nowrap; }
-.table th { font-weight: var(--weight-medium); color: var(--color-text-muted); background: var(--color-bg-subtle); white-space: nowrap; }
+.table thead th { font-weight: var(--weight-medium); color: var(--color-text-muted); background: var(--color-bg-subtle); white-space: nowrap; }
+.table tbody th { font-weight: var(--weight-medium); color: var(--color-text); }
 .table tr:last-child td { border-block-end: 0; }
 .table tbody tr:hover { background: var(--color-bg-subtle); }
 

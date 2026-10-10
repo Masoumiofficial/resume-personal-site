@@ -74,7 +74,15 @@ abstract class ResourceController extends Controller
 
     protected function titleOf(Model $item): string
     {
-        return (string) ($item->getAttribute('title') ?? $item->getAttribute('name') ?? '#'.$item->getKey());
+        // Only read loaded attributes: strict mode throws on missing ones.
+        $attributes = $item->getAttributes();
+        foreach (['title', 'name', 'organization', 'institution', 'author_name', 'display_name'] as $key) {
+            if (filled($attributes[$key] ?? null)) {
+                return (string) $attributes[$key];
+            }
+        }
+
+        return '#'.$item->getKey();
     }
 
     /** Hook for relations (checklists) and derived columns. */

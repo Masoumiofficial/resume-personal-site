@@ -105,7 +105,7 @@ ul.recovery-codes { display: grid; grid-template-columns: repeat(2, minmax(0, 1f
 .tabs__link[aria-current="page"] { color: var(--color-accent); border-block-end-color: var(--color-accent); }
 
 .form-layout { display: grid; gap: var(--space-6); grid-template-columns: minmax(0, 1fr) 18rem; align-items: start; }
-.form-grid { display: grid; gap: var(--space-5); grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.form-grid { display: grid; gap: var(--space-5); grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; }
 .form-grid__wide, .form-grid__actions { grid-column: 1 / -1; }
 .form-grid__actions { display: flex; gap: var(--space-2); padding-block-start: var(--space-2); border-block-start: 1px solid var(--color-border); }
 .form-aside { display: grid; gap: var(--space-4); position: sticky; inset-block-start: 5rem; }
